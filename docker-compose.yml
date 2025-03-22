@@ -1,0 +1,18 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+#version: '3.4'
+
+services:
+  eshopdb:
+    image: postgres
+    container_name: eshopdb
+
+    environment:
+      POSTGRES_DB: eshopdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+    volumes:
+      - /var/lib/postgresql/data
+
+    

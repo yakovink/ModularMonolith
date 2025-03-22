@@ -2,7 +2,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
-namespace Shared;
+
+namespace Shared.GenericRootModule;
 
 public static class ModuleObject
     {

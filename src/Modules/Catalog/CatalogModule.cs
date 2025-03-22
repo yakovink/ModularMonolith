@@ -1,16 +1,15 @@
-﻿using System.ComponentModel.Design;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Shared;
-
+﻿
 namespace Catalog;
+
 
 public static class CatalogModule 
 {
 
     public static IServiceCollection AddCatalogModule(this IServiceCollection services, IConfiguration configuration)
     {
+        string? configurationString=configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<CatalogDbContext> (options=>options.UseNpgsql(configurationString));
         return ModuleObject.AddModule(services,configuration, typeof(CatalogModule));
     }
 

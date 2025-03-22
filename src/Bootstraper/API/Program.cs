@@ -1,4 +1,6 @@
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Services container
@@ -20,7 +22,7 @@ app
     .UseBasketModule()
     .UseOrderingModule();
 
-
+/*
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -33,5 +35,5 @@ app.UseEndpoints(endpoints =>
 {
     _ = endpoints.MapControllers();
 });
-
+*/
 app.Run();
