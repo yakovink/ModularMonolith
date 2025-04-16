@@ -14,4 +14,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features/DeleteProduct/" />
+    <Folder Include="Features/GetProductById/" />
+    <Folder Include="Features/GetProducts/" />
+    <Folder Include="Features/GetProductsByCategory/" />
+    <Folder Include="Features/UpdateProduct/" />
+  </ItemGroup>
 </Project>

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Catalog.Products.Models;
 
 public class Product:Aggregate<Guid>   
@@ -20,7 +22,11 @@ public class Product:Aggregate<Guid>
             Categories = categories,
             Price = price,
             Description = description,
-            ImageFile = imageFile
+            ImageFile = imageFile,
+            _createdBy=Environment.UserName,
+            _createdDate=DateTime.Now,
+            _lastModifiedBy=Environment.UserName,
+            _lastModifiedDate=DateTime.Now
         };
         product.AddDomainEvent(new ProductCreatedEvent(product));
         return product;
@@ -41,6 +47,8 @@ public class Product:Aggregate<Guid>
             Price = price;
             AddDomainEvent(new ProductPriceChangedEvent(this));
         }
+        _lastModifiedBy=Environment.UserName;
+        _lastModifiedDate=DateTime.Now;
     }
 
 }

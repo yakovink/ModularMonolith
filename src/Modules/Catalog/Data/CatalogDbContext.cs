@@ -1,6 +1,3 @@
-using System;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
-
 
 namespace Catalog.Data;
 
