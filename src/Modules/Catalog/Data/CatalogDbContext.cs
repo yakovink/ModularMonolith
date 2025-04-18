@@ -22,4 +22,16 @@ public class CatalogDbContext:DbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
+    public async Task<Product> getProductById(Guid id, CancellationToken cancellationToken)
+    {
+        //get the product entity ID
+        Product? product = await Products.FindAsync([id], cancellationToken);
+        if (product == null)
+        {
+            throw new Exception($"Product not found {id}");
+        }
+        return product;
+    }
+
 }

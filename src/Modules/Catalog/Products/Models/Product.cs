@@ -51,4 +51,15 @@ public class Product:Aggregate<Guid>
         _lastModifiedDate=DateTime.Now;
     }
 
+
+    public bool Compare(Product product)
+    {
+        return Id == product.Id &&
+               Name == product.Name &&
+               Categories.SequenceEqual(product.Categories) &&
+               Price == product.Price &&
+               Description == product.Description &&
+               ImageFile == product.ImageFile;
+    }
+
 }
