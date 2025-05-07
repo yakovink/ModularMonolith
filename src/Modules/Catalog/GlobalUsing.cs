@@ -3,6 +3,7 @@ global using Shared.GenericRootModule;
 global using Shared.GenericRootModule.Seed;
 global using Shared.GenericRootModule.Interceptor;
 global using Shared.CQRS;
+global using Shared.GenericRootModule.Features;
 
 global using Catalog.Products.Models;
 global using Catalog.Products.Events;
@@ -19,6 +20,11 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Routing;
 
 global using Mapster;
 global using MediatR;
+global using Carter;

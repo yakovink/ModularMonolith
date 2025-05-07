@@ -1,7 +1,12 @@
 
 
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.RegisterCarter(typeof(CatalogModule).Assembly);
+
 
 // Services container
 
@@ -14,6 +19,9 @@ builder.Services
 
 
 var app = builder.Build();
+
+app.MapCarter();
+
 
 // Connection pipeline
 

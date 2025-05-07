@@ -15,7 +15,7 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        Product product = await dbContext.getProductById(command.product.Id, cancellationToken);
+        Product product = await dbContext.getProductById(command.product.Id, cancellationToken,RequestType.Command);
         //update the product
         UpdateProduct(product, command.product);
         //save to db
@@ -39,7 +39,7 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
 
     private async Task<bool> validate(Product product, CancellationToken cancellationToken)
     {
-        Product UpdatedProduct=await dbContext.getProductById(product.Id, cancellationToken);
+        Product UpdatedProduct=await dbContext.getProductById(product.Id, cancellationToken,RequestType.Command);
         return product.Compare(UpdatedProduct);
     }
 }

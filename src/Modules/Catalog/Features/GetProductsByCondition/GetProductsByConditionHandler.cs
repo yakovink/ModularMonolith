@@ -1,5 +1,3 @@
-using System;
-
 namespace Catalog.Features.GetProductsByCondition;
 
 public record GetProductsByConditionQuery
@@ -14,7 +12,7 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        HashSet<Product> products = await dbContext.Products.ToHashSetAsync(cancellationToken);
+        HashSet<Product> products = await dbContext.Products.AsNoTracking().ToHashSetAsync(cancellationToken);
         //filter the products by the condition
         products = filterProducts(products, Query.product);
         //map the products to DTOs

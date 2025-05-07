@@ -12,11 +12,14 @@ public static class CatalogModule
 
     public static IServiceCollection AddCatalogModule(this IServiceCollection services, IConfiguration configuration)
     {
+
+        Type catalogType=typeof(CatalogModule);
         // Add services to the container.
 
         // API Endpoint Services
 
         // Application use cases services
+
 
         services.AddMediatR(
             cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly())
@@ -37,7 +40,7 @@ public static class CatalogModule
         });
 
         services.AddScoped<IDataSeeder, CatalogDataSeed>();
-        return ModuleObject.AddModule(services,configuration, typeof(CatalogModule));
+        return ModuleObject.AddModule(services,configuration, catalogType);
     }
 
     public static IApplicationBuilder UseCatalogModule(this IApplicationBuilder app)

@@ -1,5 +1,7 @@
 
 
+using System.Reflection;
+
 namespace Shared.GenericRootModule;
 
 public static class ModuleObject
@@ -11,10 +13,26 @@ public static class ModuleObject
             .AddTransient<IModuleService, ModuleService>()
             .AddScoped<IModuleRepository, ModuleRepository>();
             */
-        
+        // add carter servisces
+
         return services;
 
     }
+    public static void RegisterCarter(this IServiceCollection services, params Assembly[] assemblies){
+
+
+        services.AddCarter(configurator:config=>{
+            foreach (var assembly in assemblies){
+                var modules=assembly.GetTypes().Where(t=>t.IsAssignableTo(typeof(ICarterModule))).ToArray();
+                config.WithModules(modules);
+            }
+
+
+
+        });    
+    }
+
+
 
     public static IApplicationBuilder UseModule (IApplicationBuilder app)
     {
@@ -45,5 +63,9 @@ public static class ModuleObject
         TDbContext context = scope.ServiceProvider.GetRequiredService<TDbContext>();
         await context.Database.MigrateAsync();
     }
+
+
+
+
 }
 

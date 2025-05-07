@@ -8,3 +8,10 @@ global using Microsoft.EntityFrameworkCore.Diagnostics;
 
 global using Shared.GenericRootModule.Seed;
 global using Shared.GenericRootModule.Interceptor;
+
+global using Carter;
+global using Mapster;
+global using MediatR;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Routing;
+global using Shared.CQRS;

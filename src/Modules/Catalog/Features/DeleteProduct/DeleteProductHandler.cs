@@ -1,6 +1,3 @@
-using System;
-using Catalog.Features.GetProductById;
-
 namespace Catalog.Features.DeleteProduct;
 
 public record DeleteProductCommand
@@ -16,7 +13,7 @@ internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandle
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        Product product = await dbContext.getProductById(command.Id, cancellationToken);
+        Product product = await dbContext.getProductById(command.Id, cancellationToken,RequestType.Command);  
         //delete the product
         DeleteProduct(product);
         //return the result

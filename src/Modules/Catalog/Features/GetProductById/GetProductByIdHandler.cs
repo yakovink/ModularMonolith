@@ -6,7 +6,7 @@ public record GetProductByIdQuery
     : IQuery<GetProductByIdResult>;
 
 
-public record GetProductByIdResult(Product Product);
+public record GetProductByIdResult(ProductDto Product);
 internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
 
@@ -14,7 +14,9 @@ internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        Product product= await dbContext.getProductById(query.id, cancellationToken);
-        return new GetProductByIdResult(product);
+        Product product= await dbContext.getProductById(query.id, cancellationToken,RequestType.Query);
+        ProductDto productDto = product.Adapt<ProductDto>();
+        //return the result
+        return new GetProductByIdResult(productDto);
     }
 }
