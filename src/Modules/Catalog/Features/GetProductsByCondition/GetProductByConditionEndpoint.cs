@@ -2,10 +2,10 @@
 namespace Catalog.Features.GetProductsByCondition;
 
 
-public record GetProductByConditionRequest(ProductDto Product);
-public record GetProductByConditionResponse(HashSet<ProductDto> Products);
+public record GetProductByConditionRequest(ProductDto Product):GenericRequest<ProductDto>(Product);
+public record GetProductByConditionResponse(HashSet<ProductDto> Products):GenericResponse<HashSet<ProductDto>>(Products);
 
-internal class GetProductByConditionEndpoint: GenericEndpoint<GetProductByConditionRequest,GetProductByConditionResponse>
+internal class GetProductByConditionEndpoint: GenericEndpoint<ProductDto, HashSet<ProductDto>>
 {
     public GetProductByConditionEndpoint() : base("/products/condition/{condition}", "Get Product By Condition", RequestType.Query)
     {

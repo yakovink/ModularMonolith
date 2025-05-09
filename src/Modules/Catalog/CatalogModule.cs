@@ -22,11 +22,16 @@ public static class CatalogModule
 
 
         services.AddMediatR(
-            cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly())
+            cfg => {
+                Console.WriteLine($"Scanning assembly: {Assembly.GetExecutingAssembly().FullName}");
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.RegisterServicesFromAssembly(typeof(GenericRequest<>).Assembly);
+                
+            }
             );
-
+        
         // Data - infrastructure services
-
+        
         string? configurationString=configuration.GetConnectionString("DefaultConnection");
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();

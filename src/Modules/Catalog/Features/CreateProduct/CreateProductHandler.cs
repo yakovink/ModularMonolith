@@ -19,7 +19,6 @@ internal class CreateProductHandler(CatalogDbContext dbContext) : ICommandHandle
                  CancellationToken cancellationToken)
     {
         //create product entity
-
         Product product = CreateNewProduct(command.Product);
         //save to db
         dbContext.Products.Add(product);

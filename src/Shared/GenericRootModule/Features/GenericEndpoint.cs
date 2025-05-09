@@ -8,16 +8,14 @@ namespace Shared.GenericRootModule.Features;
 
 
 
-public record T;
 
-public record V;
-public record GenericRequest<T>(T input);
+public record GenericRequest<T>(T input):ICommand<T>,IQuery<T>;
+
 public record GenericResponse<V>(V Output);
 
 
-
-
 public class GenericEndpoint<T,V>: ICarterModule
+
 
 
 {
@@ -103,9 +101,13 @@ private async Task<IResult> newPostEndpoint(GenericRequest<T> request, ISender s
         throw new InvalidOperationException("Sender is not set.");
     }
     //command
+
     var command =request.Adapt<ICommand<T>>();
     //result
+
+    
     var result = await sender.Send(command);
+    
     //response
     var response = result.Adapt<GenericResponse<V>>();
     //return the result

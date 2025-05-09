@@ -3,10 +3,11 @@ using Shared.GenericRootModule.Features;
 
 namespace Catalog.Features.UpdateProduct;
 
-public record UpdateProductRequest(ProductDto Product);
-public record UpdateProductResponse(bool isSuccess);
+public record UpdateProductRequest(ProductDto Product):GenericRequest<ProductDto>(Product);
 
-internal class UpdateProductEndpoint: GenericEndpoint<UpdateProductRequest, UpdateProductResponse>
+public record UpdateProductResponse(bool isSuccess):GenericResponse<bool>(isSuccess);
+
+internal class UpdateProductEndpoint: GenericEndpoint<ProductDto, bool>
 {
     public UpdateProductEndpoint() : base("/products/update", "Update Product", RequestType.Command)
     {
