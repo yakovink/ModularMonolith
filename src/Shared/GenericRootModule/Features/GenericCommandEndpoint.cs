@@ -20,6 +20,10 @@ where T : notnull
 
     protected override RouteHandlerBuilder getMapMethod(IEndpointRouteBuilder app)
     {
+        if (IsSimpleType())
+        {
+            return app.MapPost(endpoint, ([AsParameters] GenericCommand<T, V> request, ISender sender) => NewEndpoint(request, sender));
+        }
         return app.MapPost(endpoint, (GenericCommand<T, V> request, ISender sender) => NewEndpoint(request, sender));
     }
 
@@ -34,7 +38,10 @@ where T : notnull
 
     protected override RouteHandlerBuilder getMapMethod(IEndpointRouteBuilder app)
     {
-        return app.MapDelete(endpoint, ([AsParameters] GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        if (IsSimpleType()){
+            return app.MapDelete(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        }
+        return app.MapDelete(endpoint, ( GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
     }
 
 
@@ -47,7 +54,10 @@ where T : notnull
 
     protected override RouteHandlerBuilder getMapMethod(IEndpointRouteBuilder app)
     {
-        return app.MapPut(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices]ISender sender) => NewEndpoint(request, sender));
+        if (IsSimpleType()){
+            return app.MapPut(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        }
+        return app.MapPut(endpoint, (GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
     }
 
     

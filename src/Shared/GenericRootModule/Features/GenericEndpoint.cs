@@ -16,7 +16,7 @@ public record GenericResult<V>(V output);
 public record GenericResponse<V>(V Output);
 
 
-public abstract class GenericEndpoint<T,V>(string endpoint, string ActionName, List<string>? serviceNames = null) : ICarterModule
+public abstract class GenericEndpoint<T, V>(string endpoint, string ActionName, List<string>? serviceNames = null) : ICarterModule
 
 where T : notnull
 
@@ -27,7 +27,7 @@ where T : notnull
     protected List<string>? serviceNames { set; get; } = serviceNames;
 
 
-    private static Dictionary<string,Func<RouteHandlerBuilder, RouteHandlerBuilder>> api =new Dictionary<string,Func<RouteHandlerBuilder, RouteHandlerBuilder>>{
+    private static Dictionary<string, Func<RouteHandlerBuilder, RouteHandlerBuilder>> api = new Dictionary<string, Func<RouteHandlerBuilder, RouteHandlerBuilder>>{
         {"status400", builder=>builder.ProducesProblem(StatusCodes.Status400BadRequest)},
         {"status404", builder=>builder.ProducesProblem(StatusCodes.Status404NotFound)},
         {"status500", builder=>builder.ProducesProblem(StatusCodes.Status500InternalServerError)},
@@ -68,6 +68,20 @@ where T : notnull
             throw new ArgumentException($"Service {serviceName} not found");
         }
         return api[serviceName](builder);
+    }
+    
+    protected bool IsSimpleType()
+    {
+        Type type = typeof(T);
+        return
+        type.IsPrimitive ||
+        type.IsEnum ||
+        type == typeof(string) ||
+        type == typeof(decimal) ||
+        type == typeof(Guid) ||
+        type == typeof(DateTime) ||
+        type == typeof(DateTimeOffset) ||
+        type == typeof(TimeSpan);
     }
 
 }

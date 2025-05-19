@@ -3,15 +3,19 @@
 
 namespace Catalog.Features.CreateProduct;
 
-public record CreateProductRequest(ProductDto input):GenericCommand<ProductDto,Guid>(input);
+
 public record CreateProductResponse(Guid id):GenericResponse<Guid>(id);
 
 internal class CreateProductEndpoint : GenericPostEndpoint<ProductDto, Guid>
 {
 
-    public CreateProductEndpoint() : base("/products/create", "Create Product")
+    public CreateProductEndpoint() : base(
+        "/products/create",
+        "Create Product")
     {
-        this.serviceNames = new List<string> { "status400" };
+        this.serviceNames = new List<string> {
+            "status400"
+            };
     }
 
     protected async override Task<IResult> NewEndpoint(GenericCommand<ProductDto,Guid> request, ISender sender)

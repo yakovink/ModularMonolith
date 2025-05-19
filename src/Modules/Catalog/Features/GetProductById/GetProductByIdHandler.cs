@@ -2,7 +2,7 @@ using System;
 
 namespace Catalog.Features.GetProductById;
 public record GetProductByIdQuery
-    (Guid id)
+    (Guid input)
     : IQuery<GetProductByIdResult>;
 
 
@@ -14,7 +14,7 @@ internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        Product product= await dbContext.getProductById(query.id, cancellationToken,RequestType.Query);
+        Product product= await dbContext.getProductById(query.input, cancellationToken,RequestType.Query);
         ProductDto productDto = product.Adapt<ProductDto>();
         //return the result
         return new GetProductByIdResult(productDto);

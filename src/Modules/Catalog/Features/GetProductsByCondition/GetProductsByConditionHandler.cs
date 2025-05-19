@@ -1,7 +1,7 @@
 namespace Catalog.Features.GetProductsByCondition;
 
 public record GetProductsByConditionQuery
-    (ProductDto product)
+    (ProductDto input)
     : IQuery<GetProductsByConditionResult>;
 
 
@@ -11,10 +11,11 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
     public async Task<GetProductsByConditionResult> Handle(GetProductsByConditionQuery Query,
                   CancellationToken cancellationToken)
     {
+        Console.WriteLine("GetProductsByCondition: "+Query.input.ToString());
         //get the product entity ID
         HashSet<Product> products = await dbContext.Products.AsNoTracking().ToHashSetAsync(cancellationToken);
         //filter the products by the condition
-        products = filterProducts(products, Query.product);
+        products = filterProducts(products, Query.input);
         //map the products to DTOs
         HashSet<ProductDto> productsDto = mapProducts(products);
         //return the result
@@ -30,7 +31,7 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
     {
         return products.Where(p => (fake.Name==null||p.Name.Contains(fake.Name)) &&
             (fake.Categories==null||fake.Categories.All(c=>p.Categories.Contains((ProductCategory)Enum.Parse(typeof(ProductCategory),c)))) &&
-            (p.Price == fake.Price || fake.Price == 0) &&
+            (p.Price == fake.Price || fake.Price == null) &&
             (fake.Description==null||p.Description.Contains(fake.Description)) ).ToHashSet();
     }   
 }

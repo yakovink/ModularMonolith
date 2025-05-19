@@ -3,14 +3,19 @@
 namespace Catalog.Features.GetProductsByCondition;
 
 
-public record GetProductByConditionRequest(ProductDto Product):GenericQuery<ProductDto,HashSet<ProductDto>>(Product);
+
 public record GetProductByConditionResponse(HashSet<ProductDto> Products):GenericResponse<HashSet<ProductDto>>(Products);
 
 internal class GetProductByConditionEndpoint: GenericGetEndpoint<ProductDto, HashSet<ProductDto>>
 {
-    public GetProductByConditionEndpoint() : base("/products/condition/{condition}", "Get Product By Condition")
+    public GetProductByConditionEndpoint() : base(
+        "/products/condition",
+        "Get Product By Condition"
+        )
     {
-        this.serviceNames= new List<string> { "status400" };
+        this.serviceNames= new List<string> {
+             "status400"
+             };
     }
 
     protected async override Task<IResult> NewEndpoint(ProductDto request, ISender sender)

@@ -1,13 +1,17 @@
 
 namespace Catalog.Features.GetProductById;
-public record GetProductByIdRequest(Guid Id):GenericQuery<Guid,ProductDto>(Id);
+
 public record GetProductByIdResponse(ProductDto Product):GenericResponse<ProductDto>(Product);
 internal class GetProductByIdEndpoint: GenericGetEndpoint<Guid, ProductDto>
 {
 
-    public GetProductByIdEndpoint() : base("/products/{id:guid}", "Get Product By Id")
+    public GetProductByIdEndpoint() : base(
+        "/products/{id:guid}",
+        "Get Product By Id")
     {
-        this.serviceNames= new List<string> { "status400" };
+        this.serviceNames= new List<string> {
+            "status400"
+            };
     }
 
     protected async override Task<IResult> NewEndpoint(Guid request, ISender sender)

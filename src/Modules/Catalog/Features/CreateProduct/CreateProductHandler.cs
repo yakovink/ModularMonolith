@@ -45,7 +45,7 @@ internal class CreateProductHandler(CatalogDbContext dbContext) : ICommandHandle
     }).ToList();
 
         return Product.Create(
-            product.Id,
+            Guid.NewGuid(),
             product.Name,
             categories,
             (decimal)product.Price,

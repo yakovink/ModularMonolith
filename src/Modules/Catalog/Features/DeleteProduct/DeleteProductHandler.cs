@@ -1,7 +1,7 @@
 namespace Catalog.Features.DeleteProduct;
 
 public record DeleteProductCommand
-    (Guid Id)
+    (Guid input)
     : ICommand<DeleteProductResult>;
 
 
@@ -13,12 +13,12 @@ internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandle
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        Product product = await dbContext.getProductById(command.Id, cancellationToken,RequestType.Command);  
+        Product product = await dbContext.getProductById(command.input, cancellationToken,RequestType.Command);  
         //delete the product
         DeleteProduct(product);
         //return the result
         await dbContext.SaveChangesAsync(cancellationToken);
-        return new DeleteProductResult(validate(command.Id));
+        return new DeleteProductResult(validate(command.input));
 
     }
 

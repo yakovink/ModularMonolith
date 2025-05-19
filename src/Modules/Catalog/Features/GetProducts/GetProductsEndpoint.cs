@@ -1,13 +1,18 @@
 
 namespace Catalog.Features.GetProducts;
-public record GetProductsRequest():GenericQuery<Object,HashSet<ProductDto>>('\0');
+
 public record GetProductsResponse(HashSet<ProductDto> Products);
 
 internal class GetProductsEndpoint:GenericGetEndpoint<object, HashSet<ProductDto>>
 {
-    public GetProductsEndpoint() : base("/products", "Get Products")
+    public GetProductsEndpoint() : base(
+        "/products",
+        "Get Products"
+        )
     {
-        this.serviceNames= new List<string> { "status400" };
+        this.serviceNames= new List<string> {
+             "status400"
+             };
     }
 
     protected async override Task<IResult> NewEndpoint(Object obj, ISender sender)

@@ -25,6 +25,8 @@ public class CatalogDbContext:DbContext
 
     public async Task<Product> getProductById(Guid id, CancellationToken cancellationToken,RequestType type)
     {
+        Console.WriteLine($"GetProductById: {id}");
+
         Product? product = null;
         //get the product entity ID
         if (type == RequestType.Query)
@@ -32,6 +34,7 @@ public class CatalogDbContext:DbContext
             product= await Products.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
         else if (type == RequestType.Command){
+            
             product = await Products.FindAsync([id], cancellationToken);
         }
         

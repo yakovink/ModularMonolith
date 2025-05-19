@@ -3,15 +3,20 @@ using Shared.GenericRootModule.Features;
 
 namespace Catalog.Features.UpdateProduct;
 
-public record UpdateProductRequest(ProductDto Product):GenericCommand<ProductDto,bool>(Product);
 
 public record UpdateProductResponse(bool isSuccess):GenericResponse<bool>(isSuccess);
 
-internal class UpdateProductEndpoint: GenericPostEndpoint<ProductDto, bool>
+internal class UpdateProductEndpoint: GenericPutEndpoint<ProductDto, bool>
 {
-    public UpdateProductEndpoint() : base("/products/update", "Update Product")
+    public UpdateProductEndpoint() : base(
+        "/products/update",
+        "Update Product"
+        )
     {
-        this.serviceNames= new List<string> { "status400", "status404" };
+        this.serviceNames= new List<string> {
+            "status400",
+            "status404"
+            };
     }
 
     protected async override Task<IResult> NewEndpoint(GenericCommand<ProductDto,bool> request, ISender sender)
@@ -20,6 +25,7 @@ internal class UpdateProductEndpoint: GenericPostEndpoint<ProductDto, bool>
         {
             throw new InvalidOperationException("Sender is not set.");
         }
+        Console.WriteLine(request.input);
         //request
         UpdateProductCommand command = new UpdateProductCommand(request.input);
         //command

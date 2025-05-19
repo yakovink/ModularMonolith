@@ -1,13 +1,18 @@
 
 
 namespace Catalog.Features.DeleteProduct;
-public record DeleteProductRequest(Guid Id):GenericCommand<Guid,bool>(Id);
+
 public record DeleteProductResponse(bool isSuccess):GenericResponse<bool>(isSuccess);
 public class DeleteProductEndpoint:GenericDeleteEndpoint<Guid,bool>
 {
-    public DeleteProductEndpoint() : base("/products/delete", "Delete Product")
+    public DeleteProductEndpoint() : base(
+        "/products/delete",
+         "Delete Product")
     {
-        this.serviceNames= new List<string> { "status400", "status404" };
+        this.serviceNames= new List<string> {
+             "status400",
+              "status404"
+              };
     }
 
     protected async override Task<IResult> NewEndpoint(GenericCommand<Guid,bool> request, ISender sender)

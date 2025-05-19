@@ -2,7 +2,7 @@ using System;
 
 namespace Catalog.Features.UpdateProduct;
 public record UpdateProductCommand
-    (ProductDto product)
+    (ProductDto input)
     : ICommand<UpdateProductResult>;
 
 
@@ -15,10 +15,15 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
                   CancellationToken cancellationToken)
     {
         //get the product entity
-        Guid id = command.product.Id;
-        Product product = await dbContext.getProductById(id, cancellationToken,RequestType.Command);
+        Guid? id = command.input.Id;
+
+        if (id == null)
+        {
+            throw new ArgumentNullException(nameof(id));
+        }
+        Product product = await dbContext.getProductById((Guid)id, cancellationToken,RequestType.Command);
         //update the product
-        UpdateProduct(product, command.product);
+        UpdateProduct(product, command.input);
         //save to db
         await dbContext.SaveChangesAsync(cancellationToken);
         //validate
