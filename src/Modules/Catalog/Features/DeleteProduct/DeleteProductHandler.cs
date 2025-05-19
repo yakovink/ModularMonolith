@@ -5,7 +5,7 @@ public record DeleteProductCommand
     : ICommand<DeleteProductResult>;
 
 
-public record DeleteProductResult(bool IsDeleted);
+public record DeleteProductResult(bool IsDeleted): GenericResult<bool>(IsDeleted);
 
 internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandler<DeleteProductCommand, DeleteProductResult>
 {

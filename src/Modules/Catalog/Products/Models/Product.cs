@@ -24,9 +24,9 @@ public class Product:Aggregate<Guid>
             Description = description,
             ImageFile = imageFile,
             _createdBy=Environment.UserName,
-            _createdDate=DateTime.Now,
+            _createdDate=DateTime.UtcNow,
             _lastModifiedBy=Environment.UserName,
-            _lastModifiedDate=DateTime.Now
+            _lastModifiedDate=DateTime.UtcNow
         };
         product.AddDomainEvent(new ProductCreatedEvent(product));
         return product;
@@ -48,7 +48,7 @@ public class Product:Aggregate<Guid>
             AddDomainEvent(new ProductPriceChangedEvent(this));
         }
         _lastModifiedBy=Environment.UserName;
-        _lastModifiedDate=DateTime.Now;
+        _lastModifiedDate=DateTime.UtcNow;
     }
 
 
@@ -60,6 +60,28 @@ public class Product:Aggregate<Guid>
                Price == product.Price &&
                Description == product.Description &&
                ImageFile == product.ImageFile;
+    }
+
+    public override string ToString()
+    {
+        return $"Product: {Id}, {Name}, {Price}, {Description}, {ImageFile}";
+    }
+    public override bool Equals(object? obj)
+    {
+        if (obj is Product product)
+        {
+            return Id == product.Id &&
+                   Name == product.Name &&
+                   Categories.SequenceEqual(product.Categories) &&
+                   Price == product.Price &&
+                   Description == product.Description &&
+                   ImageFile == product.ImageFile;
+        }
+        return false;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Name, Categories, Price, Description, ImageFile);
     }
 
 }

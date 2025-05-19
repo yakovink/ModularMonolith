@@ -5,7 +5,7 @@ public record GetProductsByConditionQuery
     : IQuery<GetProductsByConditionResult>;
 
 
-public record GetProductsByConditionResult(HashSet<ProductDto> Products);
+public record GetProductsByConditionResult(HashSet<ProductDto> Products) : GenericResult<HashSet<ProductDto>>(Products);
 public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductsByConditionQuery, GetProductsByConditionResult>
 {
     public async Task<GetProductsByConditionResult> Handle(GetProductsByConditionQuery Query,
@@ -28,9 +28,9 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
 
     private HashSet<Product> filterProducts(HashSet<Product> products, ProductDto fake)
     {
-        return products.Where(p => (p.Name.Contains(fake.Name) || fake.Name==null) &&
-            (fake.Categories.All(c=>p.Categories.Contains(c))|| fake.Categories==null) &&
+        return products.Where(p => (fake.Name==null||p.Name.Contains(fake.Name)) &&
+            (fake.Categories==null||fake.Categories.All(c=>p.Categories.Contains((ProductCategory)Enum.Parse(typeof(ProductCategory),c)))) &&
             (p.Price == fake.Price || fake.Price == 0) &&
-            (p.Description.Contains(fake.Description) || fake.Description==null) ).ToHashSet();
+            (fake.Description==null||p.Description.Contains(fake.Description)) ).ToHashSet();
     }   
 }

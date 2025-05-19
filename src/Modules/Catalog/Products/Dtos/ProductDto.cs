@@ -3,11 +3,11 @@ using System;
 namespace Catalog.Products.Dtos;
 
 public record ProductDto
-(
-    Guid Id,
-    string Name,
-    List<ProductCategory> Categories,
-    string Description,
-    decimal Price,
-    string ImageUrl
-);
+{
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
+    public string[]? Categories { get; set; }
+    public string? Description { get; set; }
+    public decimal? Price { get; set; }
+    public string? ImageUrl { get; set; }
+};

@@ -4,7 +4,7 @@ namespace Catalog.Features.GetProducts;
 public record GetProductsQuery()
 : IQuery<GetProductsResult>;
 
-public record GetProductsResult(HashSet<ProductDto> Products);
+public record GetProductsResult(HashSet<ProductDto> Products):GenericResult<HashSet<ProductDto>>(Products);
 internal class GetProductsHandler(CatalogDbContext dbContext) 
 : IQueryHandler<GetProductsQuery, GetProductsResult>
 {

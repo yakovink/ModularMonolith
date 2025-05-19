@@ -26,9 +26,9 @@ public class InitialData
 
     public static IEnumerable<Product> Products => new List<Product>
     {
-        Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 100, "Description 1", "ImageUrl1"),
-        Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 200, "Description 2", "ImageUrl2"),
-        Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 300, "Description 3", "ImageUrl3"),
-        Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 400, "Description 4", "ImageUrl4"),
+        //Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 100, "Description 1", "ImageUrl1"),
+        //Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 200, "Description 2", "ImageUrl2"),
+        //Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 300, "Description 3", "ImageUrl3"),
+        //Product.Create(Guid.NewGuid(), GetRandomProductName(), GetRandomCategories(), 400, "Description 4", "ImageUrl4"),
     };
 }

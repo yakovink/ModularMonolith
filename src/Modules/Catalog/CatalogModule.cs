@@ -2,7 +2,10 @@
 
 
 
+using Catalog.Features.CreateProduct;
+using Catalog.Features.UpdateProduct;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Catalog;
 
@@ -23,14 +26,19 @@ public static class CatalogModule
 
         services.AddMediatR(
             cfg => {
-                Console.WriteLine($"Scanning assembly: {Assembly.GetExecutingAssembly().FullName}");
+                
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                cfg.RegisterServicesFromAssembly(typeof(GenericRequest<>).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(CatalogModule).Assembly);
+
+
                 
             }
             );
-        
-        // Data - infrastructure services
+        //foreach (var service in services)
+        //    {
+        //        Console.WriteLine($"Service: {service.ServiceType.FullName}, Lifetime: {service.Lifetime}, Implementation: {service.ImplementationType?.FullName}");
+        //    }
+
         
         string? configurationString=configuration.GetConnectionString("DefaultConnection");
 

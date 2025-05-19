@@ -6,7 +6,7 @@ public record GetProductByIdQuery
     : IQuery<GetProductByIdResult>;
 
 
-public record GetProductByIdResult(ProductDto Product);
+public record GetProductByIdResult(ProductDto Product): GenericResult<ProductDto>(Product);
 internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
 

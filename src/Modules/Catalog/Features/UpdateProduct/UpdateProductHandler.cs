@@ -6,7 +6,7 @@ public record UpdateProductCommand
     : ICommand<UpdateProductResult>;
 
 
-public record UpdateProductResult(bool isUpdated);
+public record UpdateProductResult(bool isUpdated): GenericResult<bool>(isUpdated);
 
 internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
@@ -14,8 +14,9 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command,
                   CancellationToken cancellationToken)
     {
-        //get the product entity ID
-        Product product = await dbContext.getProductById(command.product.Id, cancellationToken,RequestType.Command);
+        //get the product entity
+        Guid id = command.product.Id;
+        Product product = await dbContext.getProductById(id, cancellationToken,RequestType.Command);
         //update the product
         UpdateProduct(product, command.product);
         //save to db
@@ -28,12 +29,15 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
 
     private void UpdateProduct(Product product, ProductDto productDto)
     {
+
+
+        //update the product entity
         product.Update(
-            productDto.Name,
-            productDto.Categories,
-            productDto.Price,
-            productDto.Description,
-            productDto.ImageUrl
+            productDto.Name==null?product.Name:productDto.Name,
+            productDto.Categories == null ?product.Categories: productDto.Categories.Select(s=>(ProductCategory)Enum.Parse(typeof(ProductCategory),s)).ToList(),
+            productDto.Price==null?product.Price:(decimal)productDto.Price,
+            productDto.Description==null?product.Description:productDto.Description,
+            productDto.ImageUrl==null?product.ImageFile:productDto.ImageUrl
         );
     }
 
