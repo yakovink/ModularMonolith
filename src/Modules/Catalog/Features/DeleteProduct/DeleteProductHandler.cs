@@ -7,13 +7,23 @@ public record DeleteProductCommand
 
 public record DeleteProductResult(bool IsDeleted): GenericResult<bool>(IsDeleted);
 
+public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
+{
+    public DeleteProductCommandValidator()
+    {
+        RuleFor(x => x.input)
+            .NotEmpty()
+            .WithMessage("Id cannot be empty");
+    }
+}
+
 internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandler<DeleteProductCommand, DeleteProductResult>
 {
     public async Task<DeleteProductResult> Handle(DeleteProductCommand command,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        Product product = await dbContext.getProductById(command.input, cancellationToken,RequestType.Command);  
+        Product product = await dbContext.getProductById(command.input, cancellationToken, RequestType.Command);
         //delete the product
         DeleteProduct(product);
         //return the result

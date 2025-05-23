@@ -1,13 +1,4 @@
-﻿
-
-
-
-using Catalog.Features.CreateProduct;
-using Catalog.Features.UpdateProduct;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Catalog;
+﻿namespace Catalog;
 
 
 public static class CatalogModule 
@@ -22,24 +13,24 @@ public static class CatalogModule
         // API Endpoint Services
 
         // Application use cases services
-
+        Assembly execution = Assembly.GetExecutingAssembly();
 
         services.AddMediatR(
-            cfg => {
-                
-                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                cfg.RegisterServicesFromAssembly(typeof(CatalogModule).Assembly);
+            cfg =>
+            {
 
+                cfg.RegisterServicesFromAssembly(execution);
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));        
+            });
 
-                
-            }
-            );
+        services.AddValidatorsFromAssemblies(new[] { execution });
         //foreach (var service in services)
         //    {
         //        Console.WriteLine($"Service: {service.ServiceType.FullName}, Lifetime: {service.Lifetime}, Implementation: {service.ImplementationType?.FullName}");
         //    }
 
-        
+
         string? configurationString=configuration.GetConnectionString("DefaultConnection");
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();

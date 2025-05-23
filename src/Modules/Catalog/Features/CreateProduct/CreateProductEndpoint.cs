@@ -25,7 +25,9 @@ internal class CreateProductEndpoint : GenericPostEndpoint<ProductDto, Guid>
             throw new InvalidOperationException("Sender is not set.");
         }
         //request
+        Console.WriteLine(request.input);
         CreateProductCommand command = new CreateProductCommand(request.input);
+        Console.WriteLine(command.input);
         //result
         CreateProductResult result = await sender.Send(command);
         //response

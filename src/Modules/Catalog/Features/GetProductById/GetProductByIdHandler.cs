@@ -1,5 +1,6 @@
 using System;
 
+
 namespace Catalog.Features.GetProductById;
 public record GetProductByIdQuery
     (Guid input)
@@ -15,6 +16,12 @@ internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler
     {
         //get the product entity ID
         Product product= await dbContext.getProductById(query.input, cancellationToken,RequestType.Query);
+        //check if product is null
+        if (product == null)
+        {
+            throw new ProductNotFoundException(query.input);
+        }
+
         ProductDto productDto = product.Adapt<ProductDto>();
         //return the result
         return new GetProductByIdResult(productDto);

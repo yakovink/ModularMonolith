@@ -21,10 +21,15 @@ global using Microsoft.AspNetCore.Builder;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
-global using Microsoft.AspNetCore.Builder;
+
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Routing;
 
 global using Mapster;
 global using MediatR;
 global using Carter;
+global using FluentValidation;
+
+global using Microsoft.EntityFrameworkCore.Diagnostics;
+global using Shared.Behaviors;
+global using Shared.Exceptions;
