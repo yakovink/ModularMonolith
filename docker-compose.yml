@@ -23,7 +23,7 @@ services:
        - ACCEPT_EULA=Y
     restart: always
     ports:
-      - 5342:5342
+      - 5341:80
       - "9092:80"
 
     

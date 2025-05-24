@@ -5,11 +5,6 @@ global using Shared.GenericRootModule.Interceptor;
 global using Shared.CQRS;
 global using Shared.GenericRootModule.Features;
 
-global using Catalog.Products.Models;
-global using Catalog.Products.Events;
-global using Catalog.Data;
-global using Catalog.Data.Seed;
-global using Catalog.Products.Dtos;
 
 
 global using System.Linq.Expressions;

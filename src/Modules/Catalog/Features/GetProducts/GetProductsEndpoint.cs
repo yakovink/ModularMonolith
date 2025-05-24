@@ -1,9 +1,11 @@
 
 namespace Catalog.Features.GetProducts;
 
-public record GetProductsResponse(HashSet<ProductDto> Products);
 
-internal class GetProductsEndpoint:GenericGetEndpoint<object, HashSet<ProductDto>>
+
+public record GetProductsResponse(PaginatedResult<ProductDto> Products);
+
+internal class GetProductsEndpoint:GenericGetEndpoint<PaginationRequest, HashSet<ProductDto>>
 {
     public GetProductsEndpoint() : base(
         "/products",
@@ -15,14 +17,14 @@ internal class GetProductsEndpoint:GenericGetEndpoint<object, HashSet<ProductDto
              };
     }
 
-    protected async override Task<IResult> NewEndpoint(Object obj, ISender sender)
+    protected async override Task<IResult> NewEndpoint(PaginationRequest request, ISender sender)
     {
         if (sender == null)
         {
             throw new InvalidOperationException("Sender is not set.");
         }
         //request
-        GetProductsQuery command = new GetProductsQuery();
+        GetProductsQuery command = new GetProductsQuery(request);
         //result
         GetProductsResult result = await sender.Send(command);
         //response
