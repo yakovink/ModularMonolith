@@ -1,4 +1,4 @@
-namespace Catalog.Products.Models;
+namespace Shared.Enums;
 
 public enum ProductCategory
 {

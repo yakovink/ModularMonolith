@@ -1,8 +1,7 @@
 
 
-using Shared.Exceptions;
 
-namespace Basket;
+namespace Basket.Baskets.Models;
 
 public class ShoppingCart : Aggregate<Guid>
 {
@@ -30,7 +29,7 @@ public class ShoppingCart : Aggregate<Guid>
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
-        
+
         ShoppingCartItem? existingItem = _items.FirstOrDefault(item => item.ProductId == productId);
         if (existingItem != null)
         {
@@ -65,4 +64,6 @@ public class ShoppingCart : Aggregate<Guid>
             throw new ProductNotFoundException(productId);
         }
     }
+    
+
 }

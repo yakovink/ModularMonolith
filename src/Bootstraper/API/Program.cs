@@ -9,12 +9,32 @@
 
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, config) =>
 {
     config.ReadFrom.Configuration(context.Configuration);
 });
-builder.Services.RegisterCarter(typeof(CatalogModule).Assembly);
+
+
+Assembly? catalogAssemly = typeof(CatalogModule).Assembly;
+Assembly? basketAssembly = typeof(BasketModule).Assembly;
+
+builder.Services.RegisterCarter(
+    catalogAssemly,
+    basketAssembly
+);
+
+builder.Services.AddMediatR(
+    cfg =>
+    {
+
+        cfg.RegisterServicesFromAssemblies(catalogAssemly,basketAssembly);
+        cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));        
+    });
+builder.Services.AddValidatorsFromAssemblies([catalogAssemly,basketAssembly]);
+
 
 
 // Services container

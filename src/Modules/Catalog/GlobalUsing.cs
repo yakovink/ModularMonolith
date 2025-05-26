@@ -34,3 +34,4 @@ global using FluentValidation;
 global using Shared.Behaviors;
 global using Shared.Exceptions;
 global using Shared.Paginations;
+global using Shared.Enums;

@@ -1,4 +1,4 @@
-namespace Catalog.Data;
+namespace Shared.Enums;
 
 public enum RequestType
 {

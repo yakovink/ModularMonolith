@@ -17,7 +17,7 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.EntityFrameworkCore.Diagnostics;
-
+global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Routing;
 
@@ -29,7 +29,11 @@ global using FluentValidation;
 global using Shared.Behaviors;
 global using Shared.Exceptions;
 global using Shared.Paginations;
-
+global using Shared.Enums;
 
 global using Basket.Data;
 global using Basket.Baskets.Dtos;
+
+global using Basket.Baskets.Models;
+
+global using Basket;

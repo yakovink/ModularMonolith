@@ -1,7 +1,5 @@
-using System;
-using System.Security.Cryptography.X509Certificates;
 
-namespace Basket;
+namespace Basket.Baskets.Models;
 
 public class ShoppingCartItem : Entity<Guid>
 {
