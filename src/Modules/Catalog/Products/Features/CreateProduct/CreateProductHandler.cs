@@ -51,7 +51,6 @@ ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, Cr
         Product product = CreateNewProduct(command.input);
         //save to db
         dbContext.Products.Add(product);
-        Console.WriteLine(product.ToString());
         //return the result
         await dbContext.SaveChangesAsync(cancellationToken);
 

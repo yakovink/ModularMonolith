@@ -7,8 +7,8 @@ namespace Basket;
 public class ShoppingCart : Aggregate<Guid>
 {
     public string UserName { get; private set; } = default!;
-    private readonly List<ShopingCartItem> _items = new();
-    public IReadOnlyCollection<ShopingCartItem> Items => _items.AsReadOnly();
+    private readonly List<ShoppingCartItem> _items = new();
+    public IReadOnlyCollection<ShoppingCartItem> Items => _items.AsReadOnly();
     public decimal TotalPrice => _items.Sum(item => item.Price * item.Quantity);
 
 
@@ -30,14 +30,15 @@ public class ShoppingCart : Aggregate<Guid>
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
-        ShopingCartItem? existingItem = _items.FirstOrDefault(item => item.ProductId == productId);
+        
+        ShoppingCartItem? existingItem = _items.FirstOrDefault(item => item.ProductId == productId);
         if (existingItem != null)
         {
             existingItem.Quantity += quantity;
         }
         else
         {
-            ShopingCartItem newItem = new(
+            ShoppingCartItem newItem = new(
                 shoppingCartId: Id,
                 productId: productId,
                 quantity: quantity,
@@ -54,7 +55,7 @@ public class ShoppingCart : Aggregate<Guid>
 
     public void RemoveItem(Guid productId)
     {
-        ShopingCartItem? itemToRemove = _items.FirstOrDefault(item => item.ProductId == productId);
+        ShoppingCartItem? itemToRemove = _items.FirstOrDefault(item => item.ProductId == productId);
         if (itemToRemove != null)
         {
             _items.Remove(itemToRemove);

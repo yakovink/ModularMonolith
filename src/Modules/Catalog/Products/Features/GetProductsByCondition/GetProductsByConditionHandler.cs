@@ -11,7 +11,6 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
     public async Task<GetProductsByConditionResult> Handle(GetProductsByConditionQuery Query,
                   CancellationToken cancellationToken)
     {
-        Console.WriteLine("GetProductsByCondition: "+Query.input.ToString());
         //get the product entity ID
         HashSet<Product> products = await dbContext.Products.AsNoTracking().ToHashSetAsync(cancellationToken);
         //filter the products by the condition

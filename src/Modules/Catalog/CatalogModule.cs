@@ -25,10 +25,7 @@ public static class CatalogModule
             });
 
         services.AddValidatorsFromAssemblies(new[] { execution });
-        //foreach (var service in services)
-        //    {
-        //        Console.WriteLine($"Service: {service.ServiceType.FullName}, Lifetime: {service.Lifetime}, Implementation: {service.ImplementationType?.FullName}");
-        //    }
+
 
 
         string? configurationString=configuration.GetConnectionString("DefaultConnection");

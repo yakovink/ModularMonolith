@@ -25,7 +25,6 @@ internal class UpdateProductEndpoint: GenericPutEndpoint<ProductDto, bool>
         {
             throw new InvalidOperationException("Sender is not set.");
         }
-        Console.WriteLine(request.input);
         //request
         UpdateProductCommand command = new UpdateProductCommand(request.input);
         //command

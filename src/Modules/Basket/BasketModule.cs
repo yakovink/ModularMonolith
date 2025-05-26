@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Shared.GenericRootModule;
+﻿
+
+
 
 namespace Basket;
 
@@ -10,11 +9,27 @@ public static class BasketModule
 
     public static IServiceCollection AddBasketModule(this IServiceCollection services, IConfiguration configuration)
     {
-        return ModuleObject.AddModule(services,configuration, typeof(BasketModule));
+        
+        string? configurationString=configuration.GetConnectionString("DefaultConnection");
+
+        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+        services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventInterceptor>();
+
+
+        services.AddDbContext<BasketDbContext> ((sp,options)=>
+        {
+            options.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
+            options.UseNpgsql(configurationString);
+        });
+
+
+        return ModuleObject.AddModule(services, configuration, typeof(BasketModule));
     }
 
     public static IApplicationBuilder UseBasketModule(this IApplicationBuilder app)
     {
+
+        app = ModuleObject.useMigrate<BasketDbContext>(app);
         return ModuleObject.UseModule(app);
     }
 

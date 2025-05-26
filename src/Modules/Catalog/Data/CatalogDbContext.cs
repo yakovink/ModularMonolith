@@ -6,7 +6,6 @@ public class CatalogDbContext:DbContext
 
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options):base(options)
     {
-        Console.WriteLine(options.ToString());
 
         
     }
@@ -25,7 +24,6 @@ public class CatalogDbContext:DbContext
 
     public async Task<Product> getProductById(Guid id, CancellationToken cancellationToken,RequestType type)
     {
-        Console.WriteLine($"GetProductById: {id}");
 
         Product? product = null;
         //get the product entity ID
