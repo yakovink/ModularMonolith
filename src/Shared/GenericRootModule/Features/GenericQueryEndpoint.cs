@@ -9,7 +9,7 @@ where T : notnull
     {
     }
 
-    protected abstract Task<IResult> NewEndpoint([AsParameters] T input, [FromServices] ISender sender);
+    protected abstract Task<IResult> NewEndpoint(T input, [FromServices] ISender sender);
 
 }
 
@@ -21,7 +21,7 @@ where T : notnull
     {
         if (IsSimpleType())
         {
-            return app.MapGet(endpoint, (T input, [FromServices] ISender sender) => NewEndpoint(input, sender));
+            return app.MapGet(endpoint, ([FromBody]T input, [FromServices] ISender sender) => NewEndpoint(input, sender));
         }
         return app.MapGet(endpoint, ([AsParameters] T input, [FromServices] ISender sender) => NewEndpoint(input, sender));
     }

@@ -9,7 +9,7 @@ where T : notnull
     {
     }
 
-    protected abstract Task<IResult> NewEndpoint([AsParameters] GenericCommand<T, V> request, [FromServices] ISender sender);
+    protected abstract Task<IResult> NewEndpoint(GenericCommand<T, V> request, ISender sender);
 
 }
 
@@ -22,9 +22,9 @@ where T : notnull
     {
         if (IsSimpleType())
         {
-            return app.MapPost(endpoint, ([AsParameters] GenericCommand<T, V> request, ISender sender) => NewEndpoint(request, sender));
+            return app.MapPost(endpoint, ([AsParameters] GenericCommand<T, V> request,[FromServices] ISender sender) => NewEndpoint(request, sender));
         }
-        return app.MapPost(endpoint, (GenericCommand<T, V> request, ISender sender) => NewEndpoint(request, sender));
+        return app.MapPost(endpoint, ([FromBody]GenericCommand<T, V> request,[FromServices] ISender sender) => NewEndpoint(request, sender));
     }
 
 
@@ -41,7 +41,7 @@ where T : notnull
         if (IsSimpleType()){
             return app.MapDelete(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
         }
-        return app.MapDelete(endpoint, ( GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        return app.MapDelete(endpoint, ( [FromBody]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
     }
 
 
@@ -57,7 +57,7 @@ where T : notnull
         if (IsSimpleType()){
             return app.MapPut(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
         }
-        return app.MapPut(endpoint, (GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        return app.MapPut(endpoint, ([FromBody]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
     }
 
     

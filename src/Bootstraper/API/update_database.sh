@@ -1,1 +1,1 @@
-dotnet ef database update -c BasketDbContext
+dotnet ef database update -c AccountDbContext

@@ -2,6 +2,7 @@
 global using Basket;
 global using Catalog;
 global using Ordering;
+global using Account;
 
 global using Shared.GenericRootModule;
 global using Shared.Exceptions.Handlers;
