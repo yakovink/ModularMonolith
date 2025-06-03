@@ -8,10 +8,9 @@ namespace Catalog.Features.CreateProduct;
 
 public record CreateProductCommand
     (ProductDto input)
-    : ICommand<CreateProductResult>;
+    : ICommand<GenericResult<Guid>>;
 
 
-public record CreateProductResult(Guid Id):GenericResult<Guid>(Id);
 
 
 
@@ -39,9 +38,9 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 
 internal class CreateProductHandler(CatalogDbContext dbContext,
-ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, CreateProductResult>
+ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, GenericResult<Guid>>
 {
-    public async Task<CreateProductResult> Handle(CreateProductCommand command,
+    public async Task<GenericResult<Guid>> Handle(CreateProductCommand command,
                  CancellationToken cancellationToken)
     {
 
@@ -54,7 +53,7 @@ ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, Cr
         //return the result
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateProductResult(product.Id);
+        return new GenericResult<Guid>(product.Id);
     }
 
     private Product CreateNewProduct(ProductDto product)

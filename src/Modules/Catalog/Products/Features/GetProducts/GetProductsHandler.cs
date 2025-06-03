@@ -1,14 +1,11 @@
 
 namespace Catalog.Features.GetProducts;
 
-public record GetProductsQuery(PaginationRequest request)
-: IQuery<GetProductsResult>;
-
-public record GetProductsResult(PaginatedResult<ProductDto> Products):GenericResult<PaginatedResult<ProductDto>>(Products);
+public record GetProductsQuery(PaginationRequest request): IQuery<GenericResult<PaginatedResult<ProductDto>>>;
 internal class GetProductsHandler(CatalogDbContext dbContext) 
-: IQueryHandler<GetProductsQuery, GetProductsResult>
+: IQueryHandler<GetProductsQuery, GenericResult<PaginatedResult<ProductDto>>>
 {
-    public async Task<GetProductsResult> Handle(GetProductsQuery query,
+    public async Task<GenericResult<PaginatedResult<ProductDto>>> Handle(GetProductsQuery query,
                   CancellationToken cancellationToken)
     {
         var pageIndex = query.request.PageIndex;
@@ -35,7 +32,7 @@ internal class GetProductsHandler(CatalogDbContext dbContext)
             productsDto
         );
         //return the result
-        return new GetProductsResult(paginatedResult);
+        return new GenericResult<PaginatedResult<ProductDto>>(paginatedResult);
     }
 
     private List<ProductDto> mapProducts(List<Product> products)

@@ -9,7 +9,14 @@ where T : notnull
     {
     }
 
-    protected abstract Task<IResult> NewEndpoint(T input, [FromServices] ISender sender);
+    public async Task<IResult> SendResults(IQuery<GenericResult<V>> query, ISender sender)
+    {
+        GenericResult<V> result = await sender.Send(query);
+        GenericResponse<V> response = new GenericResponse<V>(result.output);
+        return Results.Ok(response);
+    }
+
+    protected abstract Task<IResult> NewEndpoint(T input, ISender sender);
 
 }
 
@@ -21,9 +28,9 @@ where T : notnull
     {
         if (IsSimpleType())
         {
-            return app.MapGet(endpoint, ([FromBody]T input, [FromServices] ISender sender) => NewEndpoint(input, sender));
+            return app.MapGet(endpoint, ([FromQuery]T input, [FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(input, sender);});
         }
-        return app.MapGet(endpoint, ([AsParameters] T input, [FromServices] ISender sender) => NewEndpoint(input, sender));
+        return app.MapGet(endpoint, ([AsParameters] T input, [FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(input, sender);});
     }
 
 

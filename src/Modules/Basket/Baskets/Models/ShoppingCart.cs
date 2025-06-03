@@ -20,7 +20,11 @@ public class ShoppingCart : Aggregate<Guid>
         var shoppingCart = new ShoppingCart
         {
             Id = id,
-            UserName = userName
+            UserName = userName,
+            _createdBy=Environment.UserName,
+            _createdDate=DateTime.UtcNow,
+            _lastModifiedBy=Environment.UserName,
+            _lastModifiedDate=DateTime.UtcNow
         };
         return shoppingCart;
     }

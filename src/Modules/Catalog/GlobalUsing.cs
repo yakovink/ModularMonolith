@@ -12,6 +12,7 @@ global using Catalog.Data.Seed;
 global using Catalog.Products.Dtos;
 
 
+
 global using System.Linq.Expressions;
 global using System.Reflection;
 

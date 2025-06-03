@@ -37,8 +37,12 @@ global using Shared.Enums;
 global using Account.Data;
 global using Account.Users.Models;
 global using Account.Users.Events;
+global using Account.Users.Dtos;
 global using Shared.Communicate;
-
+global using System.Net;
+global using System.Security.Cryptography;
+global using System.Text;
+global using System.Text.Json;
 
 public static class Constants
 {

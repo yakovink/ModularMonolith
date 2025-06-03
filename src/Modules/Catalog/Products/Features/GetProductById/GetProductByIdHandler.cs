@@ -4,14 +4,13 @@ using System;
 namespace Catalog.Features.GetProductById;
 public record GetProductByIdQuery
     (Guid input)
-    : IQuery<GetProductByIdResult>;
+    : IQuery<GenericResult<ProductDto>>;
 
 
-public record GetProductByIdResult(ProductDto Product): GenericResult<ProductDto>(Product);
-internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
+internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductByIdQuery, GenericResult<ProductDto>>
 {
 
-    public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query,
+    public async Task<GenericResult<ProductDto>> Handle(GetProductByIdQuery query,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
@@ -24,6 +23,6 @@ internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler
 
         ProductDto productDto = product.Adapt<ProductDto>();
         //return the result
-        return new GetProductByIdResult(productDto);
+        return new GenericResult<ProductDto>(productDto);
     }
 }

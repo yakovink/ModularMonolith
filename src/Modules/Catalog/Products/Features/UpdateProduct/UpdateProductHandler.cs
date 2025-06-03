@@ -1,14 +1,8 @@
-using System;
-using Shared.Exceptions;
+
 
 namespace Catalog.Features.UpdateProduct;
-public record UpdateProductCommand
-    (ProductDto input)
-    : ICommand<UpdateProductResult>;
 
-
-public record UpdateProductResult(bool isUpdated): GenericResult<bool>(isUpdated);
-
+public record UpdateProductCommand(ProductDto input) : ICommand<GenericResult<bool>>;
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
     public UpdateProductCommandValidator()
@@ -26,10 +20,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     }
 }
 
-internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandler<UpdateProductCommand, UpdateProductResult>
+internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandler<UpdateProductCommand, GenericResult<bool>>
 {
 
-    public async Task<UpdateProductResult> Handle(UpdateProductCommand command,
+    public async Task<GenericResult<bool>> Handle(UpdateProductCommand command,
                   CancellationToken cancellationToken)
     {
         //get the product entity
@@ -54,7 +48,7 @@ internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandle
         //validate
         bool success = await validate(product, cancellationToken);
         //return the result
-        return new UpdateProductResult(success);
+        return new GenericResult<bool>(success);
     }
 
     private void UpdateProduct(Product product, ProductDto productDto)

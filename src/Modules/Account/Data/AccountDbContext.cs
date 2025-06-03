@@ -18,13 +18,13 @@ public class AccountDbContext : DbContext
         // Configure your entities here
     }
 
-    public async Task<User> GetUserByIdAsync(string id, CancellationToken cancellationToken, RequestType type)
+    public async Task<User> GetUserByIdAsync(Guid id, CancellationToken cancellationToken, RequestType type)
     {
         User? user = null;
         // Get the user entity by ID
         if (type == RequestType.Query)
         {
-            user = await Users.AsNoTracking().SingleOrDefaultAsync(u => u.UserId==id, cancellationToken);
+            user = await Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id==id, cancellationToken);
         }
         else if (type == RequestType.Command)
         {

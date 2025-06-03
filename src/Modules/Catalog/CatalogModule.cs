@@ -13,19 +13,6 @@ public static class CatalogModule
         // API Endpoint Services
 
         // Application use cases services
-        Assembly execution = Assembly.GetExecutingAssembly();
-
-        services.AddMediatR(
-            cfg =>
-            {
-
-                cfg.RegisterServicesFromAssembly(execution);
-                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-                cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));        
-            });
-
-        services.AddValidatorsFromAssemblies(new[] { execution });
-
 
 
         string? configurationString=configuration.GetConnectionString("DefaultConnection");

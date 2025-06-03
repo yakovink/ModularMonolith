@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Account.Data.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20250601123903_InitialCreate")]
+    [Migration("20250602162939_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -21,6 +21,7 @@ namespace Account.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("account")
                 .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -31,9 +32,6 @@ namespace Account.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -48,14 +46,13 @@ namespace Account.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("LastLogin")
+                    b.Property<DateTime?>("LastLogin")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<IPAddress>("LastLoginIp")
-                        .IsRequired()
                         .HasColumnType("inet");
 
-                    b.Property<DateTime>("LastLogout")
+                    b.Property<DateTime?>("LastLogout")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
@@ -65,8 +62,7 @@ namespace Account.Data.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

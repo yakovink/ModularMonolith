@@ -2,10 +2,9 @@ namespace Catalog.Features.DeleteProduct;
 
 public record DeleteProductCommand
     (Guid input)
-    : ICommand<DeleteProductResult>;
+    : ICommand<GenericResult<bool>>;
 
 
-public record DeleteProductResult(bool IsDeleted): GenericResult<bool>(IsDeleted);
 
 public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
 {
@@ -17,9 +16,9 @@ public class DeleteProductCommandValidator : AbstractValidator<DeleteProductComm
     }
 }
 
-internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandler<DeleteProductCommand, DeleteProductResult>
+internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandler<DeleteProductCommand, GenericResult<bool>>
 {
-    public async Task<DeleteProductResult> Handle(DeleteProductCommand command,
+    public async Task<GenericResult<bool>> Handle(DeleteProductCommand command,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
@@ -28,7 +27,7 @@ internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandle
         DeleteProduct(product);
         //return the result
         await dbContext.SaveChangesAsync(cancellationToken);
-        return new DeleteProductResult(validate(command.input));
+        return new GenericResult<bool>(validate(command.input));
 
     }
 

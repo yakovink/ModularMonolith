@@ -12,7 +12,7 @@ public record GenericCommand<T,V>(T input):ICommand<V>;
 public record GenericQuery<T,V>(T input):IQuery<V>;
 
 public record GenericResult<V>(V output);
-public record GenericResponse<V>(V Output);
+public record GenericResponse<V>(V output);
 
 
 public abstract class GenericEndpoint<T, V>(string endpoint, string ActionName, List<string>? serviceNames = null) : ICarterModule
@@ -31,6 +31,7 @@ where T : notnull
         {"status404", builder=>builder.ProducesProblem(StatusCodes.Status404NotFound)},
         {"status500", builder=>builder.ProducesProblem(StatusCodes.Status500InternalServerError)},
     };
+    
 
 
 
@@ -67,6 +68,14 @@ where T : notnull
             throw new ArgumentException($"Service {serviceName} not found");
         }
         return api[serviceName](builder);
+    }
+
+    public void checkSender(ISender sender)
+    {
+        if (sender == null)
+            {
+                throw new InvalidOperationException("Sender is not set.");
+            }
     }
     
     protected bool IsSimpleType()

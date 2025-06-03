@@ -2,13 +2,13 @@ namespace Catalog.Features.GetProductsByCondition;
 
 public record GetProductsByConditionQuery
     (ProductDto input)
-    : IQuery<GetProductsByConditionResult>;
+    : IQuery<GenericResult<HashSet<ProductDto>>>;
 
 
-public record GetProductsByConditionResult(HashSet<ProductDto> Products) : GenericResult<HashSet<ProductDto>>(Products);
-public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductsByConditionQuery, GetProductsByConditionResult>
+
+public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductsByConditionQuery, GenericResult<HashSet<ProductDto>>>
 {
-    public async Task<GetProductsByConditionResult> Handle(GetProductsByConditionQuery Query,
+    public async Task<GenericResult<HashSet<ProductDto>>> Handle(GetProductsByConditionQuery Query,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
@@ -18,7 +18,7 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
         //map the products to DTOs
         HashSet<ProductDto> productsDto = mapProducts(products);
         //return the result
-        return new GetProductsByConditionResult(productsDto);
+        return new GenericResult<HashSet<ProductDto>>(productsDto);
     }
 
     private HashSet<ProductDto> mapProducts(HashSet<Product> products)
@@ -28,9 +28,9 @@ public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryH
 
     private HashSet<Product> filterProducts(HashSet<Product> products, ProductDto fake)
     {
-        return products.Where(p => (fake.Name==null||p.Name.Contains(fake.Name)) &&
-            (fake.Categories==null||fake.Categories.All(c=>p.Categories.Contains((ProductCategory)Enum.Parse(typeof(ProductCategory),c)))) &&
+        return products.Where(p => (fake.Name == null || p.Name.Contains(fake.Name)) &&
+            (fake.Categories == null || fake.Categories.All(c => p.Categories.Contains((ProductCategory)Enum.Parse(typeof(ProductCategory), c)))) &&
             (p.Price == fake.Price || fake.Price == null) &&
-            (fake.Description==null||p.Description.Contains(fake.Description)) ).ToHashSet();
-    }   
+            (fake.Description == null || p.Description.Contains(fake.Description))).ToHashSet();
+    }
 }

@@ -9,6 +9,13 @@ where T : notnull
     {
     }
 
+    public async Task<IResult> SendResults(ICommand<GenericResult<V>> command, ISender sender)
+    {
+        GenericResult<V> result = await sender.Send(command);
+        GenericResponse<V> response = new GenericResponse<V>(result.output);
+        return Results.Ok(response);
+    }
+
     protected abstract Task<IResult> NewEndpoint(GenericCommand<T, V> request, ISender sender);
 
 }
@@ -22,9 +29,9 @@ where T : notnull
     {
         if (IsSimpleType())
         {
-            return app.MapPost(endpoint, ([AsParameters] GenericCommand<T, V> request,[FromServices] ISender sender) => NewEndpoint(request, sender));
+            return app.MapPost(endpoint, ([AsParameters] GenericCommand<T, V> request,[FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(request, sender);});
         }
-        return app.MapPost(endpoint, ([FromBody]GenericCommand<T, V> request,[FromServices] ISender sender) => NewEndpoint(request, sender));
+        return app.MapPost(endpoint, ([FromBody]GenericCommand<T, V> request,[FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(request, sender);});
     }
 
 
@@ -39,9 +46,9 @@ where T : notnull
     protected override RouteHandlerBuilder getMapMethod(IEndpointRouteBuilder app)
     {
         if (IsSimpleType()){
-            return app.MapDelete(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+            return app.MapDelete(endpoint, ([AsParameters] GenericCommand<T, V> request, [FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(request, sender);});
         }
-        return app.MapDelete(endpoint, ( [FromBody]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        return app.MapDelete(endpoint, ( [FromBody]GenericCommand<T, V> request, [FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(request, sender);});
     }
 
 
@@ -55,9 +62,9 @@ where T : notnull
     protected override RouteHandlerBuilder getMapMethod(IEndpointRouteBuilder app)
     {
         if (IsSimpleType()){
-            return app.MapPut(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+            return app.MapPut(endpoint, ([AsParameters]GenericCommand<T, V> request, [FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(request, sender);});
         }
-        return app.MapPut(endpoint, ([FromBody]GenericCommand<T, V> request, [FromServices] ISender sender) => NewEndpoint(request, sender));
+        return app.MapPut(endpoint, ([FromBody]GenericCommand<T, V> request, [FromServices] ISender sender) => {checkSender(sender); return NewEndpoint(request, sender);});
     }
 
     

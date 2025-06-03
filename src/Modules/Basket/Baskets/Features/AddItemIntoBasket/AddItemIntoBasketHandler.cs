@@ -2,8 +2,8 @@ using System;
 
 namespace Basket.Baskets.Features.AddItemIntoBasket;
 
-public record AddItemIntoBasketCommand(string UserName, ShoppingCartItemDto item) : ICommand<AddItemIntoBasketResult>;
-public record AddItemIntoBasketResult(Guid id) : GenericResult<Guid>(id);
+public record AddItemIntoBasketCommand(string UserName, ShoppingCartItemDto item) : ICommand<GenericResult<Guid>>;
+
 
 
 public class AddItemIntoBasketValidator : AbstractValidator<AddItemIntoBasketCommand>
@@ -16,10 +16,10 @@ public class AddItemIntoBasketValidator : AbstractValidator<AddItemIntoBasketCom
     }
 }
 
-public class AddItemIntoBasketHandler(BasketDbContext dbContext) : ICommandHandler<AddItemIntoBasketCommand, AddItemIntoBasketResult>
+public class AddItemIntoBasketHandler(BasketDbContext dbContext) : ICommandHandler<AddItemIntoBasketCommand, GenericResult<Guid>>
 {
 
-    public async Task<AddItemIntoBasketResult> Handle(AddItemIntoBasketCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<Guid>> Handle(AddItemIntoBasketCommand request, CancellationToken cancellationToken)
     {
         // Validate the command
         if (request.item == null || request.item.ProductId == null || request.item.Quantity == null || request.item.color == null || request.item.ProductName == null)
@@ -40,7 +40,7 @@ public class AddItemIntoBasketHandler(BasketDbContext dbContext) : ICommandHandl
             request.item.Price);
 
         await dbContext.SaveChangesAsync(cancellationToken);
-        return new AddItemIntoBasketResult(shoppingCart.Id);
+        return new GenericResult<Guid>(shoppingCart.Id);
     }
 
 
