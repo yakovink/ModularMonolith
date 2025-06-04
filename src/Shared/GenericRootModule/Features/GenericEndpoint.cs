@@ -8,11 +8,17 @@ namespace Shared.GenericRootModule.Features;
 
 
 
-public record GenericCommand<T,V>(T input):ICommand<V>;
-public record GenericQuery<T,V>(T input):IQuery<V>;
+
+
+
+public record GenericCommandRequest<T, V>(T input) : ICommand<V>;
+
+
+
+
 
 public record GenericResult<V>(V output);
-public record GenericResponse<V>(V output);
+public record GenericResponse<V>{public required V output { get; init; }};
 
 
 public abstract class GenericEndpoint<T, V>(string endpoint, string ActionName, List<string>? serviceNames = null) : ICarterModule

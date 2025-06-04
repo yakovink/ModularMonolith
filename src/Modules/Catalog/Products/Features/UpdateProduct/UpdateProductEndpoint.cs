@@ -19,8 +19,9 @@ internal class UpdateProductEndpoint: GenericPutEndpoint<ProductDto, bool>
             };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommand<ProductDto,bool> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ProductDto,bool> request, ISender sender)
     {
-        return await this.SendResults(new UpdateProductCommand(request.input), sender);  
+
+        return await SendResults(new UpdateProductCommand(request.input), sender);  
     }
 }

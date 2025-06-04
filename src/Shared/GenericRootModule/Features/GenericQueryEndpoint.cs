@@ -12,7 +12,8 @@ where T : notnull
     public async Task<IResult> SendResults(IQuery<GenericResult<V>> query, ISender sender)
     {
         GenericResult<V> result = await sender.Send(query);
-        GenericResponse<V> response = new GenericResponse<V>(result.output);
+        GenericResponse<V> response = result.Adapt<GenericResponse<V>>();
+        
         return Results.Ok(response);
     }
 

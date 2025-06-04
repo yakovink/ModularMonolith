@@ -16,7 +16,7 @@ internal class CreateUserEndpoint : GenericPostEndpoint<UserDto, Guid>
         };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommand<UserDto, Guid> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<UserDto, Guid> request, ISender sender)
     {
         return await SendResults(new CreateUserCommand(request.input), sender);
     }

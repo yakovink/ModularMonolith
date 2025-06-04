@@ -12,7 +12,7 @@ internal class ChangePasswordEndPoint : GenericPutEndpoint<PasswordDto,bool>
             };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommand<PasswordDto, bool> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<PasswordDto, bool> request, ISender sender)
     {
         return await SendResults(new ChangePasswordCommand(request.input), sender);
     }
