@@ -27,16 +27,11 @@ builder.Services.RegisterCarter(
     accountAssembly
 );
 
-builder.Services.AddMediatR(
-    cfg =>
-    {
-
-        cfg.RegisterServicesFromAssemblies(catalogAssemly,basketAssembly,accountAssembly);
-        cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-        cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));        
-    });
-builder.Services.AddValidatorsFromAssemblies([catalogAssemly,basketAssembly,accountAssembly]);
-
+builder.Services.RegisterMediatR(
+    catalogAssemly,
+    basketAssembly,
+    accountAssembly
+);
 
 
 // Services container

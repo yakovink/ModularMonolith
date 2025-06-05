@@ -5,6 +5,7 @@ namespace Account.Users.Dtos;
 public record UserDto
 {
     public Guid? Id { get; set; }
+    public Guid? ShoppingCartId { get; set; }
     public string? UserId { get; set; }
     public string? UserName { get; set; }
     public string? Email { get; set; }

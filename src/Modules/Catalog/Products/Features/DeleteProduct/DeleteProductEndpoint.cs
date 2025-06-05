@@ -15,7 +15,7 @@ public class DeleteProductEndpoint:GenericDeleteEndpoint<Guid,bool>
               };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommand<Guid,bool> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<Guid,bool> request, ISender sender)
     {
         return await SendResults(new DeleteProductCommand(request.input), sender);
     }

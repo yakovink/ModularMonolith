@@ -15,7 +15,7 @@ internal class CreateBasketEndpoint : GenericPostEndpoint<ShoppingCartDto, Guid>
         };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommand<ShoppingCartDto, Guid> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ShoppingCartDto, Guid> request, ISender sender)
     {
         return await SendResults(new CreateBasketCommand(request.input), sender);
     }

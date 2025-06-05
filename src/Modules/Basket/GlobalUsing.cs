@@ -37,3 +37,10 @@ global using Basket.Baskets.Dtos;
 global using Basket.Baskets.Models;
 
 global using Basket;
+global using Shared.Communicate;
+
+public static class Constants
+{
+	public static readonly HttpController BasketController = new HttpController("http://localhost", 5000);
+
+}

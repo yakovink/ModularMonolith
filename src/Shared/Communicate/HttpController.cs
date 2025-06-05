@@ -43,7 +43,9 @@ public class HttpController : HttpClient
     {
         string url = $"{this.url}:{this.port}/{endpoint}";
         HttpResponseMessage response = await GetAsync(url, cancellationToken);
+        Console.WriteLine(response.Content);
         string responseString = await response.Content.ReadAsStringAsync(cancellationToken);
+        Console.WriteLine(responseString);
         return JsonDeserialize(responseString);
     }
 

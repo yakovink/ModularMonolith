@@ -2,7 +2,7 @@ using System;
 
 namespace Basket.Baskets.Features.GetBasket;
 
-public record GetBasketQuery(string input) : IQuery<GenericResult<ShoppingCartDto>>;
+public record GetBasketQuery(Guid input) : IQuery<GenericResult<ShoppingCartDto>>;
 
 
 
@@ -11,10 +11,10 @@ internal class GetBasketHandler(BasketDbContext dbContext) : IQueryHandler<GetBa
     public async Task<GenericResult<ShoppingCartDto>> Handle(GetBasketQuery request, CancellationToken cancellationToken)
     {
         // Simulate retrieval logic
-        ShoppingCart? basket = await dbContext.getCartByUserName(request.input, cancellationToken, RequestType.Query);
+        ShoppingCart? basket = await dbContext.getCartById(request.input, cancellationToken, RequestType.Query);
         if (basket == null)
         {
-            throw new BasketNotFoundException(request.input);
+            throw new BasketNotFoundException(request.input.ToString());
         }
         
         var shoppingCartDto = basket.Adapt<ShoppingCartDto>();

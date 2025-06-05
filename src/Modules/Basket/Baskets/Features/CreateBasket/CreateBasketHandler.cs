@@ -46,16 +46,13 @@ internal class CreateBasketHandler(BasketDbContext dbContext) : ICommandHandler<
             );
         input.Items.ForEach(item =>
         {
-            if (item == null || item.ProductId == null || item.Quantity ==null || item.Price <= 0 || item.ProductName == null || item.color == null)
+            if (item == null || item.ProductId == null || item.Quantity ==null )
             {
                 throw new ArgumentNullException(nameof(item), "ShoppingCartItemDto cannot be null or have invalid values");
             }
             newBasket.AddItem(
                 (Guid)item.ProductId,
-                (int)item.Quantity,
-                item.color,
-                item.ProductName,
-                item.Price
+                (int)item.Quantity
             );
         });
         return newBasket;

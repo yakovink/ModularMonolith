@@ -1,8 +1,10 @@
 using System;
+using System.Text.Json;
+using Shared.Communicate;
 
 namespace Basket.Baskets.Features.AddItemIntoBasket;
 
-public record AddItemIntoBasketCommand(string UserName, ShoppingCartItemDto item) : ICommand<GenericResult<Guid>>;
+public record AddItemIntoBasketCommand(ShoppingCartItemDto item) : ICommand<GenericResult<Guid>>;
 
 
 
@@ -10,7 +12,7 @@ public class AddItemIntoBasketValidator : AbstractValidator<AddItemIntoBasketCom
 {
     public AddItemIntoBasketValidator()
     {
-        RuleFor(x => x.UserName).NotEmpty().WithMessage("User name is required.");
+        RuleFor(x => x.item.ShoppingCartId).NotNull().WithMessage("User name is required.");
         RuleFor(x => x.item.ProductId).NotEmpty().WithMessage("Product ID is required.");
         RuleFor(x => x.item.Quantity).GreaterThan(0).WithMessage("Quantity must be greater than zero.");
     }
@@ -22,25 +24,32 @@ public class AddItemIntoBasketHandler(BasketDbContext dbContext) : ICommandHandl
     public async Task<GenericResult<Guid>> Handle(AddItemIntoBasketCommand request, CancellationToken cancellationToken)
     {
         // Validate the command
-        if (request.item == null || request.item.ProductId == null || request.item.Quantity == null || request.item.color == null || request.item.ProductName == null)
+        if (request.item == null || request.item.ProductId == null || request.item.Quantity == null|| request.item.ShoppingCartId == null)
         {
             throw new ArgumentException("Invalid item details provided.");
         }
-
-        ShoppingCart? shoppingCart = await dbContext.getCartByUserName(request.UserName, cancellationToken, RequestType.Command);
+        Guid shopping_cart = (Guid)request.item.ShoppingCartId;
+        ShoppingCart? shoppingCart = await dbContext.getCartById(shopping_cart, cancellationToken, RequestType.Command);
+        JsonElement product = await ShoppingCartItem.GetProduct((Guid)request.item.ProductId);
         if (shoppingCart == null)
         {
-            throw new BasketNotFoundException(request.UserName);
+            throw new BasketNotFoundException(shopping_cart.ToString());
         }
+        if (product.ValueKind == JsonValueKind.Null || 
+            product.ValueKind == JsonValueKind.Undefined ||
+            (product.ValueKind == JsonValueKind.Object && product.GetRawText() == "{}"))
+        {
+            throw new ProductNotFoundException((Guid)request.item.ProductId);
+        }
+            
         shoppingCart.AddItem(
             (Guid)request.item.ProductId,
-            (int)request.item.Quantity,
-            request.item.color,
-            request.item.ProductName,
-            request.item.Price);
-
+            (int)request.item.Quantity);
+        Console.WriteLine(shoppingCart.Items.Count());
         await dbContext.SaveChangesAsync(cancellationToken);
         return new GenericResult<Guid>(shoppingCart.Id);
+
+
     }
 
 

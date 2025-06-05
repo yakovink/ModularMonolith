@@ -1,6 +1,7 @@
 
 
 using System.Reflection;
+using Shared.Behaviors;
 
 namespace Shared.GenericRootModule;
 
@@ -26,15 +27,24 @@ public static class ModuleObject
                 var modules=assembly.GetTypes().Where(t=>t.IsAssignableTo(typeof(ICarterModule))).ToArray();
                 config.WithModules(modules);
             }
-
-
-
         });    
+    }
+
+    public static IServiceCollection RegisterMediatR(this IServiceCollection services, params Assembly[] assemblies)
+    {
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssemblies(assemblies);
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+        });
+        services.AddValidatorsFromAssemblies(assemblies);
+        return services;
     }
 
 
 
-    public static IApplicationBuilder UseModule (IApplicationBuilder app)
+    public static IApplicationBuilder UseModule(IApplicationBuilder app)
     {
         return app;
     }

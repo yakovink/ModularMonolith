@@ -5,9 +5,9 @@ namespace Basket.Baskets.Features.GetBasket;
 
 
 
-public class GetBasketEndpoint : GenericGetEndpoint<string, ShoppingCartDto>
+public class GetBasketEndpoint : GenericGetEndpoint<Guid, ShoppingCartDto>
 {
-    public GetBasketEndpoint() : base("/baskets/{name}", "Get Basket")
+    public GetBasketEndpoint() : base("/baskets/get/", "Get Basket")
     {
         this.serviceNames = new List<string>
         {
@@ -16,7 +16,7 @@ public class GetBasketEndpoint : GenericGetEndpoint<string, ShoppingCartDto>
     }
 
 
-    protected async override Task<IResult> NewEndpoint(string input, ISender sender)
+    protected async override Task<IResult> NewEndpoint(Guid input, ISender sender)
     {
         return await SendResults(new GetBasketQuery(input), sender);
     }

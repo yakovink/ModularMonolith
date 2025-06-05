@@ -1,4 +1,6 @@
 
+using Microsoft.AspNetCore.Mvc;
+
 namespace Catalog.Features.GetProductById;
 
 
@@ -6,7 +8,7 @@ internal class GetProductByIdEndpoint: GenericGetEndpoint<Guid, ProductDto>
 {
 
     public GetProductByIdEndpoint() : base(
-        "/products/{id:guid}",
+        "/products/get",
         "Get Product By Id")
     {
         this.serviceNames= new List<string> {
@@ -14,8 +16,8 @@ internal class GetProductByIdEndpoint: GenericGetEndpoint<Guid, ProductDto>
             };
     }
 
-    protected async override Task<IResult> NewEndpoint(Guid request, ISender sender)
+    protected async override Task<IResult> NewEndpoint([FromQuery] Guid input, ISender sender)
     {
-        return await SendResults(new GetProductByIdQuery(request), sender);
+        return await SendResults(new GetProductByIdQuery(input), sender);
     }
 }

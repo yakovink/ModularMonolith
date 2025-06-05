@@ -18,7 +18,7 @@ internal class CreateProductEndpoint : GenericPostEndpoint<ProductDto, Guid>
             };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommand<ProductDto,Guid> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ProductDto,Guid> request, ISender sender)
     {
         return await SendResults(new CreateProductCommand(request.input), sender);
     }

@@ -19,23 +19,23 @@ public class BasketDbContext : DbContext
         base.OnModelCreating(builder);
     }
 
-    public async Task<ShoppingCart> getCartByUserName(string userName, CancellationToken cancellationToken,RequestType type)
+    public async Task<ShoppingCart> getCartById(Guid id, CancellationToken cancellationToken,RequestType type)
     {
 
         ShoppingCart? shoppingCart = null;
         //get the product entity ID
         if (type == RequestType.Query)
         {
-            shoppingCart= await ShoppingCarts.AsNoTracking().SingleOrDefaultAsync(p => p.UserName == userName, cancellationToken);
+            shoppingCart= await ShoppingCarts.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
         else if (type == RequestType.Command){
             
-            shoppingCart = await ShoppingCarts.FindAsync([userName], cancellationToken);
+            shoppingCart = await ShoppingCarts.FindAsync([id], cancellationToken);
         }
         
         if (shoppingCart == null)
         {
-            throw new Exception($"Product not found {userName}");
+            throw new Exception($"Product not found {id}");
         }
         return shoppingCart;
     }

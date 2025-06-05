@@ -1,6 +1,9 @@
 
 
 
+using System.Text.Json;
+using Microsoft.AspNetCore.Authentication;
+
 namespace Basket.Baskets.Models;
 
 public class ShoppingCart : Aggregate<Guid>
@@ -8,7 +11,20 @@ public class ShoppingCart : Aggregate<Guid>
     public string UserName { get; private set; } = default!;
     private readonly List<ShoppingCartItem> _items = new();
     public IReadOnlyCollection<ShoppingCartItem> Items => _items.AsReadOnly();
-    public decimal TotalPrice => _items.Sum(item => item.Price * item.Quantity);
+ 
+
+    public async Task<decimal> GetTotalPriceAsync()
+    {
+        decimal total = 0;
+
+        foreach (var item in _items)
+        {
+            JsonElement product = await ShoppingCartItem.GetProduct(item.ProductId);
+            decimal price = product.GetProperty("price").GetDecimal();
+            total += price * item.Quantity;
+        }
+        return total;
+    }
 
 
 
@@ -29,10 +45,11 @@ public class ShoppingCart : Aggregate<Guid>
         return shoppingCart;
     }
 
-    public void AddItem(Guid productId, int quantity, string color, string productName, decimal price)
+
+
+    public void AddItem(Guid productId, int quantity)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
 
         ShoppingCartItem? existingItem = _items.FirstOrDefault(item => item.ProductId == productId);
         if (existingItem != null)
@@ -41,18 +58,17 @@ public class ShoppingCart : Aggregate<Guid>
         }
         else
         {
-            ShoppingCartItem newItem = new(
+            ShoppingCartItem newItem = new ShoppingCartItem(
                 shoppingCartId: Id,
                 productId: productId,
-                quantity: quantity,
-                color: color,
-                productName: productName,
-                price: price
+                quantity: quantity
             )
             {
                 Id = Guid.NewGuid()
             };
             _items.Add(newItem);
+            
+
         }
     }
 

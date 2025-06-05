@@ -13,10 +13,6 @@ namespace Shared.GenericRootModule.Features;
 
 public record GenericCommandRequest<T, V>(T input) : ICommand<V>;
 
-
-
-
-
 public record GenericResult<V>(V output);
 public record GenericResponse<V>{public required V output { get; init; }};
 

@@ -141,6 +141,7 @@ public class User : Aggregate<Guid>
         return new UserDto
         {
             Id = Id,
+            ShoppingCartId=ShoppingCartId,
             UserId = UserId,
             UserName = UserName,
             Email = Email,
@@ -159,7 +160,7 @@ public class User : Aggregate<Guid>
         }
         string[] addressParts = userDto.Address?.Split(',', StringSplitOptions.TrimEntries) ?? throw new ArgumentException("Address cannot be null or empty");
         User user = await Create(
-            userDto.Id ?? Guid.NewGuid(),
+            userDto.Id ?? new Guid(),
             userDto.UserId ?? throw new ArgumentException("UserId cannot be null"),
             userDto.UserName ?? throw new ArgumentException("UserName cannot be null"),
             userDto.FirstName ?? throw new ArgumentException("FirstName cannot be null"),
