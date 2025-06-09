@@ -1,24 +1,24 @@
-using System;
+ 
 
 namespace Basket.Baskets.Features.GetBasket;
 
-public record GetBasketQuery(Guid input) : IQuery<GenericResult<ShoppingCartDto>>;
+public record GetBasketQuery(Guid input) : IQuery<GenericResult<HashSet<ShoppingCartItemDto>>>;
 
 
 
-internal class GetBasketHandler(BasketDbContext dbContext) : IQueryHandler<GetBasketQuery, GenericResult<ShoppingCartDto>>
+internal class GetBasketHandler(IBasketRepository repository) : IQueryHandler<GetBasketQuery, GenericResult<HashSet<ShoppingCartItemDto>>>
 {
-    public async Task<GenericResult<ShoppingCartDto>> Handle(GetBasketQuery request, CancellationToken cancellationToken)
+    public async Task<GenericResult<HashSet<ShoppingCartItemDto>>> Handle(GetBasketQuery request, CancellationToken cancellationToken)
     {
         // Simulate retrieval logic
-        ShoppingCart? basket = await dbContext.getCartById(request.input, cancellationToken, RequestType.Query);
-        if (basket == null)
+        List<ShoppingCartItem>? items = (await repository.GetCart(request.input)).items;
+
+        if (items == null)
         {
             throw new BasketNotFoundException(request.input.ToString());
         }
+        HashSet<ShoppingCartItemDto> dtos = items.Select(i => i.ToDto()).ToHashSet();
         
-        var shoppingCartDto = basket.Adapt<ShoppingCartDto>();
-        
-        return new GenericResult<ShoppingCartDto>(shoppingCartDto);
+        return new GenericResult<HashSet<ShoppingCartItemDto>>(dtos);
     }
 }

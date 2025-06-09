@@ -20,7 +20,11 @@ global using Shared.CQRS;
 global using Carter;
 global using Mapster;
 global using MediatR;
-
+global using Microsoft.EntityFrameworkCore.ChangeTracking;
+global using Shared.DDD;
+global using System.Reflection;
+global using Shared.Behaviors;
 
 global using FluentValidation;
 global using FluentValidation.Results;
+global using System.Text.Json;

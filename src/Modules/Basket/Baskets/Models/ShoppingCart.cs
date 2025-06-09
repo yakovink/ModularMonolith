@@ -1,87 +1,48 @@
 
 
 
-using System.Text.Json;
-using Microsoft.AspNetCore.Authentication;
+
+
 
 namespace Basket.Baskets.Models;
 
 public class ShoppingCart : Aggregate<Guid>
 {
-    public string UserName { get; private set; } = default!;
-    private readonly List<ShoppingCartItem> _items = new();
-    public IReadOnlyCollection<ShoppingCartItem> Items => _items.AsReadOnly();
- 
+    [JsonInclude]
+    public List<ShoppingCartItem> items { get; private set; } = new();
 
-    public async Task<decimal> GetTotalPriceAsync()
+
+    public static ShoppingCart Create()
     {
-        decimal total = 0;
-
-        foreach (var item in _items)
-        {
-            JsonElement product = await ShoppingCartItem.GetProduct(item.ProductId);
-            decimal price = product.GetProperty("price").GetDecimal();
-            total += price * item.Quantity;
-        }
-        return total;
-    }
-
-
-
-
-    public static ShoppingCart Create(Guid id, string userName)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(userName);
 
         var shoppingCart = new ShoppingCart
         {
-            Id = id,
-            UserName = userName,
-            _createdBy=Environment.UserName,
-            _createdDate=DateTime.UtcNow,
-            _lastModifiedBy=Environment.UserName,
-            _lastModifiedDate=DateTime.UtcNow
+            Id = Guid.NewGuid(),
+            _createdBy = Environment.UserName,
+            _createdDate = DateTime.UtcNow,
+            _lastModifiedBy = Environment.UserName,
+            _lastModifiedDate = DateTime.UtcNow
         };
         return shoppingCart;
     }
 
-
-
-    public void AddItem(Guid productId, int quantity)
+    public ShoppingCartItem AddItem(ShoppingCartItemDto itemDto)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
-
-        ShoppingCartItem? existingItem = _items.FirstOrDefault(item => item.ProductId == productId);
-        if (existingItem != null)
+        if (itemDto.ProductId == null || itemDto.Quantity == null)
         {
-            existingItem.Quantity += quantity;
+            throw new ArgumentException("invalid parameters");
         }
-        else
-        {
-            ShoppingCartItem newItem = new ShoppingCartItem(
-                shoppingCartId: Id,
-                productId: productId,
-                quantity: quantity
-            )
-            {
-                Id = Guid.NewGuid()
-            };
-            _items.Add(newItem);
-            
-
-        }
+        ShoppingCartItem item = ShoppingCartItem.Create(this, (Guid)itemDto.ProductId, (int)itemDto.Quantity);
+        item.setCart(this);
+        items.Add(item);
+        return item;
     }
 
-    public void RemoveItem(Guid productId)
+    public void checkEmpty()
     {
-        ShoppingCartItem? itemToRemove = _items.FirstOrDefault(item => item.ProductId == productId);
-        if (itemToRemove != null)
+        if (items.Count() == 0)
         {
-            _items.Remove(itemToRemove);
-        }
-        else
-        {
-            throw new ProductNotFoundException(productId);
+            throw new Exception("the cart is empty");
         }
     }
     

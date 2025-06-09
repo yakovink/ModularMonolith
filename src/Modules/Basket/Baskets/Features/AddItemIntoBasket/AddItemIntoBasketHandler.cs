@@ -1,6 +1,4 @@
-using System;
-using System.Text.Json;
-using Shared.Communicate;
+ 
 
 namespace Basket.Baskets.Features.AddItemIntoBasket;
 
@@ -18,7 +16,7 @@ public class AddItemIntoBasketValidator : AbstractValidator<AddItemIntoBasketCom
     }
 }
 
-public class AddItemIntoBasketHandler(BasketDbContext dbContext) : ICommandHandler<AddItemIntoBasketCommand, GenericResult<Guid>>
+public class AddItemIntoBasketHandler(IBasketRepository repository) : ICommandHandler<AddItemIntoBasketCommand, GenericResult<Guid>>
 {
 
     public async Task<GenericResult<Guid>> Handle(AddItemIntoBasketCommand request, CancellationToken cancellationToken)
@@ -28,26 +26,22 @@ public class AddItemIntoBasketHandler(BasketDbContext dbContext) : ICommandHandl
         {
             throw new ArgumentException("Invalid item details provided.");
         }
-        Guid shopping_cart = (Guid)request.item.ShoppingCartId;
-        ShoppingCart? shoppingCart = await dbContext.getCartById(shopping_cart, cancellationToken, RequestType.Command);
-        JsonElement product = await ShoppingCartItem.GetProduct((Guid)request.item.ProductId);
-        if (shoppingCart == null)
+        ShoppingCart cart = await repository.GetCart((Guid)request.item.ShoppingCartId, false, cancellationToken);
+        ShoppingCartItem? item = cart.items.Where(i => i.ProductId == (Guid)request.item.ProductId).SingleOrDefault();
+        if (item == null)
         {
-            throw new BasketNotFoundException(shopping_cart.ToString());
+            item = ShoppingCartItem.Create(cart, (Guid)request.item.ProductId, (int)request.item.Quantity);
+            await repository.AddItem(item);
         }
-        if (product.ValueKind == JsonValueKind.Null || 
-            product.ValueKind == JsonValueKind.Undefined ||
-            (product.ValueKind == JsonValueKind.Object && product.GetRawText() == "{}"))
+        else
         {
-            throw new ProductNotFoundException((Guid)request.item.ProductId);
+            item.Quantity += (int)request.item.Quantity;
         }
-            
-        shoppingCart.AddItem(
-            (Guid)request.item.ProductId,
-            (int)request.item.Quantity);
-        Console.WriteLine(shoppingCart.Items.Count());
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new GenericResult<Guid>(shoppingCart.Id);
+        await repository.SaveChangesAsync(cart.Id,cancellationToken);
+        await repository.ReloadItems(cart, cancellationToken);
+        
+        Console.WriteLine($"cart {cart.Id} have {cart.items.Count()} items");
+        return new GenericResult<Guid>(item.Id);
 
 
     }

@@ -1,5 +1,4 @@
-using System;
-using Shared.GenericRootModule.Features;
+ 
 
 namespace Catalog.Features.UpdateProduct;
 

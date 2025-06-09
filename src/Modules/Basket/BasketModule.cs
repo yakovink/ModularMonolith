@@ -2,6 +2,7 @@
 
 
 
+
 namespace Basket;
 
 public static class BasketModule
@@ -9,7 +10,19 @@ public static class BasketModule
 
     public static IServiceCollection AddBasketModule(this IServiceCollection services, IConfiguration configuration)
     {
-        
+
+        services.AddScoped<IBasketRepository, BasketRepository>();
+        services.Decorate<IBasketRepository, CachedBasketRepository>();
+        /*
+        services.AddScoped<IBasketRepository>(provider=>
+            new CachedBasketRepository(
+                provider.GetRequiredService<IBasketRepository>(),
+                provider.GetRequiredService<IDistributedCache>())
+        );
+        */
+
+
+
         string? configurationString=configuration.GetConnectionString("DefaultConnection");
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();

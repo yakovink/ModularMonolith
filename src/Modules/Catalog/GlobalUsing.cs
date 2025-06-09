@@ -36,3 +36,8 @@ global using Shared.Behaviors;
 global using Shared.Exceptions;
 global using Shared.Paginations;
 global using Shared.Enums;
+global using Microsoft.EntityFrameworkCore.Migrations;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+global using Microsoft.AspNetCore.Mvc;

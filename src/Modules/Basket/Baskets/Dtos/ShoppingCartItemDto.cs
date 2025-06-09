@@ -1,4 +1,4 @@
-using System;
+ ;
 
 namespace Basket.Baskets.Dtos;
 
@@ -8,6 +8,4 @@ public record ShoppingCartItemDto
     public Guid? ProductId { get; set; }
     public Guid? ShoppingCartId { get; set; }
     public int? Quantity { get; set; }
-    public string? ProductName { get; set; }
-    public decimal Price { get; set; }
 }

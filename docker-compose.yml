@@ -15,6 +15,13 @@ services:
     volumes:
       - /var/lib/postgresql/data
 
+  distributedCache:
+    image: redis
+    container_name: cache
+    restart: always
+    ports:
+     - 6379:6379
+
 
   seq:
     image: datalust/seq:latest
@@ -24,6 +31,6 @@ services:
     restart: always
     ports:
       - 5341:80
-      - "9092:80"
+      - 9092:80
 
     

@@ -1,8 +1,8 @@
-using System;
+ 
 
 namespace Basket.Baskets.Features.RemoveItemFromBasket;
 
-public record RemoveItemFromBasketCommand(ShoppingCartItemDto input) : ICommand<GenericResult<Guid>>;
+public record RemoveItemFromBasketCommand(ShoppingCartItemDto input) : ICommand<GenericResult<bool>>;
 
 public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBasketCommand>
 {
@@ -13,26 +13,22 @@ public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBas
         RuleFor(x => x.input.ProductId).NotEmpty().WithMessage("Product ID is required.");
     }
 }
-internal class RemoveItemFromBasketHandler(BasketDbContext dbContext) : ICommandHandler<RemoveItemFromBasketCommand, GenericResult<Guid>>
+internal class RemoveItemFromBasketHandler(IBasketRepository repository) : ICommandHandler<RemoveItemFromBasketCommand, GenericResult<bool>>
 {
-    public async Task<GenericResult<Guid>> Handle(RemoveItemFromBasketCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<bool>> Handle(RemoveItemFromBasketCommand request, CancellationToken cancellationToken)
     {
         if (request.input.ShoppingCartId == null || request.input.ProductId == null)
         {
             throw new BasketNotFoundException("Shopping cart id and product id are both required");
         }
-        Guid shopping_cart_id = (Guid)request.input.ShoppingCartId;
-        // Retrieve the shopping cart by user name
-        ShoppingCart? shoppingCart = await dbContext.getCartById(shopping_cart_id, cancellationToken, RequestType.Command);
-        if (shoppingCart == null)
+        ShoppingCart cart = await repository.GetCart((Guid)request.input.ShoppingCartId,false,cancellationToken);
+        ShoppingCartItem? item = cart.items.Where(i => i.ProductId == (Guid)request.input.ProductId).SingleOrDefault();
+        if (item == null)
         {
-            throw new BasketNotFoundException(shopping_cart_id.ToString());
+            throw new NotFoundException($"item {(Guid)request.input.ProductId} was not found in cart {(Guid)request.input.ShoppingCartId}");
         }
-
-        // Remove the item from the shopping cart
-        shoppingCart.RemoveItem((Guid)request.input.ProductId);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new GenericResult<Guid>(shopping_cart_id);
+        var output= await repository.RemoveItem(item);
+        return new GenericResult<bool>(output);
     }
 
 

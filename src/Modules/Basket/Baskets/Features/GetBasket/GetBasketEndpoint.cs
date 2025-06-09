@@ -1,11 +1,9 @@
-using System;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.Baskets.Features.GetBasket;
 
 
 
-public class GetBasketEndpoint : GenericGetEndpoint<Guid, ShoppingCartDto>
+public class GetBasketEndpoint : GenericGetEndpoint<Guid, HashSet<ShoppingCartItemDto>>
 {
     public GetBasketEndpoint() : base("/baskets/get/", "Get Basket")
     {

@@ -1,4 +1,5 @@
 
+
 namespace Basket.Baskets.Features.CreateBasket;
 
 
@@ -17,44 +18,24 @@ public class CreateBasketCommandValidator : AbstractValidator<CreateBasketComman
 
 
 
-internal class CreateBasketHandler(BasketDbContext dbContext) : ICommandHandler<CreateBasketCommand, GenericResult<Guid>>
+internal class CreateBasketHandler(IBasketRepository repository) : ICommandHandler<CreateBasketCommand, GenericResult<Guid>>
 {
     public async Task<GenericResult<Guid>> Handle(CreateBasketCommand request, CancellationToken cancellationToken)
     {
-        ShoppingCart? ShoppingCart = CreateNewBasket(request.input);
-        dbContext.ShoppingCarts.Add(ShoppingCart);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        ShoppingCart ShoppingCart = CreateNewBasket(request.input);
+        ShoppingCart=await repository.CreateBasket(ShoppingCart);
         return new GenericResult<Guid>(ShoppingCart.Id);
     }
+    
+
 
     private ShoppingCart CreateNewBasket(ShoppingCartDto input)
     {
-        if (input == null || input.UserName == null )
+        if (input == null || input.UserName == null)
         {
             throw new ArgumentNullException(nameof(input), "ShoppingCartDto or UserName cannot be null");
         }
-        
-        if (input.Items == null)
-        {
-            input.Items = new List<ShoppingCartItemDto>();
-        }
-
-
-        var newBasket = ShoppingCart.Create(
-            Guid.NewGuid(),
-            input.UserName
-            );
-        input.Items.ForEach(item =>
-        {
-            if (item == null || item.ProductId == null || item.Quantity ==null )
-            {
-                throw new ArgumentNullException(nameof(item), "ShoppingCartItemDto cannot be null or have invalid values");
-            }
-            newBasket.AddItem(
-                (Guid)item.ProductId,
-                (int)item.Quantity
-            );
-        });
+        var newBasket = ShoppingCart.Create();
         return newBasket;
     }
 }

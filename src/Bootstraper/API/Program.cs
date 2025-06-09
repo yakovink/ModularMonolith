@@ -33,7 +33,10 @@ builder.Services.RegisterMediatR(
     accountAssembly
 );
 
-
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
 // Services container
 
 builder.Services.AddControllers();

@@ -1,6 +1,4 @@
-using System;
-using MediatR;
-
+ 
 
 namespace Account.Users.Events;
 

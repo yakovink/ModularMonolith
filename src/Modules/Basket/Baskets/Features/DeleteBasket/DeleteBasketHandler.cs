@@ -1,4 +1,4 @@
-using System;
+ 
 
 namespace Basket.Baskets.Features.DeleteBasket;
 
@@ -6,18 +6,12 @@ namespace Basket.Baskets.Features.DeleteBasket;
 public record DeleteBasketCommand(Guid input) : ICommand<GenericResult<bool>>;
 
 
-internal class DeleteBasketHandler(BasketDbContext dbContext) : ICommandHandler<DeleteBasketCommand, GenericResult<bool>>
+internal class DeleteBasketHandler(IBasketRepository repository) : ICommandHandler<DeleteBasketCommand, GenericResult<bool>>
 {
     public async Task<GenericResult<bool>> Handle(DeleteBasketCommand request, CancellationToken cancellationToken)
     {
         // Simulate deletion logic
-        ShoppingCart? basket = await dbContext.getCartById(request.input, cancellationToken, RequestType.Command);
-        if (basket == null)
-        {
-            throw new BasketNotFoundException(request.input.ToString());
-        }
-        dbContext.ShoppingCarts.Remove(basket);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new GenericResult<bool>(true);
+        bool output = await repository.DeleteBasket(request.input);
+        return new GenericResult<bool>(output);
     }
 }
