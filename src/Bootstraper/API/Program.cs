@@ -20,17 +20,20 @@ builder.Host.UseSerilog((context, config) =>
 Assembly? catalogAssemly = typeof(CatalogModule).Assembly;
 Assembly? basketAssembly = typeof(BasketModule).Assembly;
 Assembly? accountAssembly = typeof(AccountModule).Assembly;
+Assembly? werhouseAssembly = typeof(WerhouseModule).Assembly;
 
 builder.Services.RegisterCarter(
     catalogAssemly,
     basketAssembly,
-    accountAssembly
+    accountAssembly,
+    werhouseAssembly
 );
 
 builder.Services.RegisterMediatR(
     catalogAssemly,
     basketAssembly,
-    accountAssembly
+    accountAssembly,
+    werhouseAssembly
 );
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -44,6 +47,7 @@ builder.Services
     .AddCatalogModule(builder.Configuration)
     .AddBasketModule(builder.Configuration)
     .AddOrderingModule(builder.Configuration)
+    .AddWerhouseModule(builder.Configuration)
     .AddAccountModule(builder.Configuration);
 
 
@@ -61,6 +65,7 @@ app
     .UseCatalogModule()
     .UseBasketModule()
     .UseOrderingModule()
+    .UseWerhouseModule()
     .UseAccountModule();
 
 app.UseExceptionHandler(options => { });

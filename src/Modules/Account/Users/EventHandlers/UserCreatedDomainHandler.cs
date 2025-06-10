@@ -1,5 +1,4 @@
- ;
-
+ 
 
 namespace Account.Users.EventHandlers;
 

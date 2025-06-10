@@ -9,10 +9,9 @@ public class CreateBasketCommandValidator : AbstractValidator<CreateBasketComman
     public CreateBasketCommandValidator()
     {
         
-        RuleFor(x => x.input.UserName)
-            .NotEmpty()
+        RuleFor(x => x.input.Id)
             .NotNull()
-            .WithMessage("UserName is required");
+            .WithMessage("Id is required");
     }
 }
 
@@ -31,7 +30,7 @@ internal class CreateBasketHandler(IBasketRepository repository) : ICommandHandl
 
     private ShoppingCart CreateNewBasket(ShoppingCartDto input)
     {
-        if (input == null || input.UserName == null)
+        if (input == null )
         {
             throw new ArgumentNullException(nameof(input), "ShoppingCartDto or UserName cannot be null");
         }

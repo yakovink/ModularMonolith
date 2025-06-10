@@ -4,14 +4,10 @@ global using Shared.GenericRootModule.Seed;
 global using Shared.GenericRootModule.Interceptor;
 global using Shared.CQRS;
 global using Shared.GenericRootModule.Features;
-global using Shared.Behaviors;
-global using Shared.Exceptions;
-global using Shared.Paginations;
-global using Shared.Enums;
-global using Shared.Communicate;
 
-global using System.Text.Json;
-global using System.Text.Json.Serialization;
+
+
+
 global using System.Linq.Expressions;
 global using System.Reflection;
 
@@ -22,33 +18,21 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.EntityFrameworkCore.Diagnostics;
-global using Microsoft.AspNetCore.Mvc;
+
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Routing;
-global using Microsoft.EntityFrameworkCore.Migrations;
-global using Microsoft.Extensions.Caching.Distributed;
-global using Microsoft.EntityFrameworkCore.Infrastructure;
-global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 global using Mapster;
 global using MediatR;
 global using Carter;
 global using FluentValidation;
 
-
-
-global using Basket.Data;
-global using Basket.Baskets.Dtos;
-global using Basket.Data.Repositories;
-global using Basket.Baskets.Models;
-global using Basket;
-
-
-
+global using Shared.Behaviors;
+global using Shared.Exceptions;
+global using Shared.Paginations;
+global using Shared.Enums;
+global using Microsoft.EntityFrameworkCore.Migrations;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
-public static class Constants
-{
-	public static readonly HttpController BasketController = new HttpController("http://localhost", 5000);
-
-}
+global using Microsoft.AspNetCore.Mvc;

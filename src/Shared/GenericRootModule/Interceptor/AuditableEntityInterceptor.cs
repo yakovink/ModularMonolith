@@ -1,8 +1,7 @@
 
 
 
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Shared.DDD;
+
 
 namespace Shared.GenericRootModule.Interceptor;
 

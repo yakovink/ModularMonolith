@@ -1,4 +1,4 @@
- ;
+ 
 
 namespace Account.Users.Features.GetUserById;
 public record GetUserByIdQuery(Guid input) : IQuery<GenericResult<UserDto >>;
