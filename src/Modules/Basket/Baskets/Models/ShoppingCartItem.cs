@@ -9,7 +9,7 @@ public class ShoppingCartItem : Entity<Guid>
 
     public Guid ShoppingCartId { get; private set; } = default!;
     public Guid ProductId { get; private set; } = default!;
-    public int Quantity { get; internal set; } = default!;
+    public int Quantity { get; set; } = default!;
     [JsonIgnore]
     public ShoppingCart ShoppingCart { get; private set; } = default!;
 

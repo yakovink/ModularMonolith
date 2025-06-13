@@ -5,18 +5,18 @@ namespace Basket.Baskets.Features.CreateBasket;
 
 
 
-internal class CreateBasketEndpoint : GenericPostEndpoint<ShoppingCartDto, Guid>
+internal class CreateBasketEndpoint : GenericPostEndpoint<object, Guid>
 {
     public CreateBasketEndpoint() : base("/baskets/create", "Create Basket")
     {
-        this.serviceNames = new List<string>
+        serviceNames = new List<string>
         {
             "status400"
         };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ShoppingCartDto, Guid> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<object, Guid> request, ISender sender)
     {
-        return await SendResults(new CreateBasketCommand(request.input), sender);
+        return await SendResults(new CreateBasketCommand(), sender);
     }
 }

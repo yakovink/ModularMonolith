@@ -11,14 +11,10 @@ internal class GetBasketHandler(IBasketRepository repository) : IQueryHandler<Ge
     public async Task<GenericResult<HashSet<ShoppingCartItemDto>>> Handle(GetBasketQuery request, CancellationToken cancellationToken)
     {
         // Simulate retrieval logic
-        List<ShoppingCartItem>? items = (await repository.GetCart(request.input)).items;
-
-        if (items == null)
-        {
+        List<ShoppingCartItem> items = (await repository.GetCart(request.input, true,cancellationToken)).ToList()??
             throw new BasketNotFoundException(request.input.ToString());
-        }
+
         HashSet<ShoppingCartItemDto> dtos = items.Select(i => i.ToDto()).ToHashSet();
-        
         return new GenericResult<HashSet<ShoppingCartItemDto>>(dtos);
     }
 }

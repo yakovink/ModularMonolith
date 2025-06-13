@@ -11,7 +11,7 @@ internal class DeleteBasketHandler(IBasketRepository repository) : ICommandHandl
     public async Task<GenericResult<bool>> Handle(DeleteBasketCommand request, CancellationToken cancellationToken)
     {
         // Simulate deletion logic
-        bool output = await repository.DeleteBasket(request.input);
+        bool output = await repository.DeleteElement(request.input);
         return new GenericResult<bool>(output);
     }
 }

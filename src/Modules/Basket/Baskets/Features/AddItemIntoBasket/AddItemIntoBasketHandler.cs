@@ -22,26 +22,17 @@ public class AddItemIntoBasketHandler(IBasketRepository repository) : ICommandHa
     public async Task<GenericResult<Guid>> Handle(AddItemIntoBasketCommand request, CancellationToken cancellationToken)
     {
         // Validate the command
-        if (request.item == null || request.item.ProductId == null || request.item.Quantity == null|| request.item.ShoppingCartId == null)
-        {
-            throw new ArgumentException("Invalid item details provided.");
-        }
-        ShoppingCart cart = await repository.GetCart((Guid)request.item.ShoppingCartId, false, cancellationToken);
-        ShoppingCartItem? item = cart.items.Where(i => i.ProductId == (Guid)request.item.ProductId).SingleOrDefault();
-        if (item == null)
-        {
-            item = ShoppingCartItem.Create(cart, (Guid)request.item.ProductId, (int)request.item.Quantity);
-            await repository.AddItem(item);
-        }
-        else
-        {
-            item.Quantity += (int)request.item.Quantity;
-        }
-        await repository.SaveChangesAsync(cart.Id,cancellationToken);
-        await repository.ReloadItems(cart, cancellationToken);
+        ShoppingCartItemDto itemDto = request.item?? throw new ArgumentNullException(nameof(request.item), "Item cannot be null");
+        Guid shoppingCartId = itemDto.ShoppingCartId ?? throw new ArgumentNullException(nameof(itemDto.ShoppingCartId), "Shopping Cart ID cannot be null");
+        Guid productId = itemDto.ProductId ?? throw new ArgumentNullException(nameof(itemDto.ProductId), "Product ID cannot be null");
+        int quantity = itemDto.Quantity ?? throw new ArgumentNullException(nameof(itemDto.Quantity), "Quantity cannot be null");
+        ShoppingCart cart = await repository.GetElementById(shoppingCartId, false, cancellationToken) ?? throw new Exception($"Shopping cart with ID {shoppingCartId} not found.");
+        ShoppingCartItem demoItem = ShoppingCartItem.Create(cart, productId, quantity);
+        demoItem = await repository.AddItem(demoItem, cancellationToken);
+        
         
         Console.WriteLine($"cart {cart.Id} have {cart.items.Count()} items");
-        return new GenericResult<Guid>(item.Id);
+        return new GenericResult<Guid>(demoItem.Id);
 
 
     }

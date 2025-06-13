@@ -8,10 +8,8 @@ public class WerhouseItemHistoryConfigurations : IEntityTypeConfiguration<Werhou
     public void Configure(EntityTypeBuilder<WerhouseItemHistory> builder)
     {
         builder.HasKey(i => i.Id);
-        builder.Property("In").IsRequired();
         builder.Property("_createdDate").IsRequired();
-        builder.Property("operation").IsRequired();
-        builder.Property("description").IsRequired();
+        builder.Property("WerhouseItemId").IsRequired();
 
 
     }

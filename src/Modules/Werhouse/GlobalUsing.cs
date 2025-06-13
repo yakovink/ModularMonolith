@@ -5,7 +5,10 @@ global using Shared.GenericRootModule.Interceptor;
 global using Shared.CQRS;
 global using Shared.GenericRootModule.Features;
 
-
+global using Werhouse;
+global using Werhouse.Data;
+global using Werhouse.Data.Repositories;
+global using Werhouse.Items;
 
 
 global using System.Linq.Expressions;

@@ -13,14 +13,6 @@ public static class BasketModule
 
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.Decorate<IBasketRepository, CachedBasketRepository>();
-        /*
-        services.AddScoped<IBasketRepository>(provider=>
-            new CachedBasketRepository(
-                provider.GetRequiredService<IBasketRepository>(),
-                provider.GetRequiredService<IDistributedCache>())
-        );
-        */
-
 
 
         string? configurationString=configuration.GetConnectionString("DefaultConnection");

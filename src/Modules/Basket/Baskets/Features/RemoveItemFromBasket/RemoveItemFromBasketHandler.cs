@@ -17,17 +17,17 @@ internal class RemoveItemFromBasketHandler(IBasketRepository repository) : IComm
 {
     public async Task<GenericResult<bool>> Handle(RemoveItemFromBasketCommand request, CancellationToken cancellationToken)
     {
-        if (request.input.ShoppingCartId == null || request.input.ProductId == null)
-        {
-            throw new BasketNotFoundException("Shopping cart id and product id are both required");
-        }
-        ShoppingCart cart = await repository.GetCart((Guid)request.input.ShoppingCartId,false,cancellationToken);
-        ShoppingCartItem? item = cart.items.Where(i => i.ProductId == (Guid)request.input.ProductId).SingleOrDefault();
-        if (item == null)
-        {
-            throw new NotFoundException($"item {(Guid)request.input.ProductId} was not found in cart {(Guid)request.input.ShoppingCartId}");
-        }
-        var output= await repository.RemoveItem(item);
+        ShoppingCartItemDto dto = request.input ?? throw new ArgumentNullException(nameof(dto));
+        Guid shoppingCartId = dto.ShoppingCartId ?? throw new ArgumentNullException(nameof(dto.ShoppingCartId));
+        Guid productId = dto.ProductId ?? throw new ArgumentNullException(nameof(dto.ProductId));
+
+
+        IEnumerable<ShoppingCartItem> items = await repository.GetCart(shoppingCartId,false,cancellationToken);
+        Console.WriteLine($"cart {shoppingCartId} have {items.Count()} items");
+        ShoppingCartItem item = items.Where(i => i.ProductId == productId).SingleOrDefault()??
+            throw new NotFoundException($"item {productId} was not found in cart {shoppingCartId}");
+
+        bool output= await repository.RemoveItem(item);
         return new GenericResult<bool>(output);
     }
 

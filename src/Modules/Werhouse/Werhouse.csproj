@@ -18,6 +18,5 @@
     <Folder Include="Domain/" />
     <Folder Include="Items/EventHandlers/" />
     <Folder Include="Items/Events/" />
-    <Folder Include="Items/Features/" />
   </ItemGroup>
 </Project>

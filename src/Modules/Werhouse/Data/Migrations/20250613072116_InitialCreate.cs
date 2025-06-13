@@ -1,8 +1,9 @@
-﻿ 
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Basket.Data.Migrations
+namespace Werhouse.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -11,14 +12,17 @@ namespace Basket.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "basket");
+                name: "werhouse");
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCarts",
-                schema: "basket",
+                name: "WerhouseItem",
+                schema: "werhouse",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Werhouse = table.Column<int>(type: "integer", nullable: true),
                     _createdDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     _lastModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     _createdBy = table.Column<string>(type: "text", nullable: true),
@@ -26,52 +30,54 @@ namespace Basket.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCarts", x => x.Id);
+                    table.PrimaryKey("PK_WerhouseItem", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCartItems",
-                schema: "basket",
+                name: "WerhouseItemHistory",
+                schema: "werhouse",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ShoppingCartId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    _createdDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    In = table.Column<int>(type: "integer", nullable: true),
+                    Out = table.Column<int>(type: "integer", nullable: true),
+                    operation = table.Column<string>(type: "text", nullable: true),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    WerhouseItemId = table.Column<Guid>(type: "uuid", nullable: false),
+                    _createdDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     _lastModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     _createdBy = table.Column<string>(type: "text", nullable: true),
                     _lastModifiedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCartItems", x => x.Id);
+                    table.PrimaryKey("PK_WerhouseItemHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShoppingCartItems_ShoppingCarts_ShoppingCartId",
-                        column: x => x.ShoppingCartId,
-                        principalSchema: "basket",
-                        principalTable: "ShoppingCarts",
+                        name: "FK_WerhouseItemHistory_WerhouseItem_WerhouseItemId",
+                        column: x => x.WerhouseItemId,
+                        principalSchema: "werhouse",
+                        principalTable: "WerhouseItem",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCartItems_ShoppingCartId",
-                schema: "basket",
-                table: "ShoppingCartItems",
-                column: "ShoppingCartId");
+                name: "IX_WerhouseItemHistory_WerhouseItemId",
+                schema: "werhouse",
+                table: "WerhouseItemHistory",
+                column: "WerhouseItemId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ShoppingCartItems",
-                schema: "basket");
+                name: "WerhouseItemHistory",
+                schema: "werhouse");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCarts",
-                schema: "basket");
+                name: "WerhouseItem",
+                schema: "werhouse");
         }
     }
 }
