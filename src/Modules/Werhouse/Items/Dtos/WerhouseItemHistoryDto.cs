@@ -2,7 +2,7 @@ using System;
 
 namespace Werhouse.Items.Dtos;
 
-public record WerhouseItemHistoryDto
+public record WerhouseItemHistoryDto : WerhouseModuleStructre.IWerhouseItemHistoryConfigurations.MDto
 {
     public Guid? Id { get; set; }
     public Guid? WerhouseItemId{ get; set; }

@@ -1,16 +1,10 @@
-using System;
-using Shared.Data;
-using Werhouse.Items.Models;
 
 namespace Werhouse.Data;
 
-public class WerhouseDbContext : GenericDbContext<WerhouseDbContext>
+public class WerhouseDbContext : WerhouseModuleStructre.MWerhouseDbContext
 {
     public WerhouseDbContext(DbContextOptions<WerhouseDbContext> options)
-        : base(options, new[]{
-            typeof(WerhouseItemHistory),
-            typeof(WerhouseItem)
-        })
+        : base(options)
     {
     }
 

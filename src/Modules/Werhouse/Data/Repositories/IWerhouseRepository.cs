@@ -4,7 +4,7 @@ using Werhouse.Items.Models;
 
 namespace Werhouse.Data.Repositories;
 
-public interface IWerhouseRepository : IGenericRepository<WerhouseItem>
+public interface IWerhouseRepository : WerhouseModuleStructre.IMWerhouseRepository
 {
     public Task<IEnumerable<WerhouseItemHistory>> GetItemHistory(Guid itemId, bool AsNoTracking=true,CancellationToken cancellationToken = default);
     public Task<Guid> PerformItemOperation(WerhouseItemHistory itemHistory, CancellationToken cancellationToken = default);

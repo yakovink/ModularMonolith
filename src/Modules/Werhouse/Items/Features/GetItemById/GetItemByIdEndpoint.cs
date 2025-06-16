@@ -1,9 +1,7 @@
-using System;
-using Werhouse.Items.Models;
 
 namespace Werhouse.Items.Features.GetItemById;
 
-internal class GetItemByIdEndpoint : GenericGetEndpoint<Guid, HashSet<WerhouseItemHistory>>
+internal class GetItemByIdEndpoint : WerhouseModuleStructre.GetItemById.MGetEndpoint
 {
     public GetItemByIdEndpoint() : base("/werhouse/get", "Get Werhouse Item History")
     {

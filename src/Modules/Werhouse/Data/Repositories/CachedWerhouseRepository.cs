@@ -1,16 +1,17 @@
 using System;
+using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using Shared.Data;
 using Werhouse.Items.Models;
 
 namespace Werhouse.Data.Repositories;
 
-public class CachedWerhouseRepository(WerhouseRepository repository, IDistributedCache cache) :
-    GenericCachedRepository<WerhouseItem, WerhouseDbContext>(repository, cache), IWerhouseRepository
+public class CachedWerhouseRepository(WerhouseRepository repository, IDistributedCache cache) : WerhouseModuleStructre.MWerhouseCachedRepository(repository,cache), IWerhouseRepository
 {
     public async Task<IEnumerable<WerhouseItemHistory>> GetItemHistory(Guid itemId, bool AsNoTracking = true, CancellationToken cancellationToken = default)
     {
-        return (await GetElementById(itemId, AsNoTracking, cancellationToken, c => c.checkpoints)).checkpoints;
+        WerhouseItem items = await GetElementById(itemId, AsNoTracking, cancellationToken, c => c.checkpoints);
+        return items.checkpoints;
     }
 
     public async Task<IEnumerable<WerhouseItem>> GetItemsByCondition(bool AsNoTracking, Expression<Func<WerhouseItem, bool>> condition, CancellationToken cancellationToken = default)
@@ -20,6 +21,16 @@ public class CachedWerhouseRepository(WerhouseRepository repository, IDistribute
 
     public async Task<WerhouseItem> GetNewItem(Guid productId, CancellationToken cancellationToken = default)
     {
+
+        JsonDocument doc = await Constants.WerhouseController.Get($"products/get?input={productId}",cancellationToken);
+        JsonElement productElement = doc.RootElement.GetProperty("output");
+        if (productElement.ValueKind == JsonValueKind.Null)
+        {
+            throw new ProductNotFoundException(productId);
+        }
+        Console.WriteLine(productElement.ToString());
+
+
         WerhouseItem newItem = WerhouseItem.Create(productId);
 
         await CreateElement(newItem, cancellationToken);
@@ -30,6 +41,7 @@ public class CachedWerhouseRepository(WerhouseRepository repository, IDistribute
         // Add the history entry to the item
         await PerformItemOperation(history, cancellationToken);
         return newItem;
+        
     }
 
     public async Task<Guid> PerformItemOperation(WerhouseItemHistory itemHistory, CancellationToken cancellationToken = default)

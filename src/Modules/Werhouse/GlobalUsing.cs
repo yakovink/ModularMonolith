@@ -39,3 +39,10 @@ global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 global using Microsoft.AspNetCore.Mvc;
+global using Shared.Communicate;
+
+public static class Constants
+{
+	public static readonly HttpController WerhouseController = new HttpController("http://localhost", 5000);
+
+}

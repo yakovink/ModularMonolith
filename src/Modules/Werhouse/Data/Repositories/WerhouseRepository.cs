@@ -1,27 +1,35 @@
 using System;
+using System.Text.Json;
 using Shared.Data;
 using Werhouse.Items.Models;
 
 namespace Werhouse.Data.Repositories;
 
-public class WerhouseRepository(WerhouseDbContext dbContext) :
-    GenericRepository<WerhouseItem, WerhouseDbContext>(dbContext), IWerhouseRepository
+public class WerhouseRepository(WerhouseDbContext dbContext) : WerhouseModuleStructre.MWerhouseRepository(dbContext), IWerhouseRepository
 {
+
     public async Task<IEnumerable<WerhouseItemHistory>> GetItemHistory(Guid itemId, bool AsNoTracking = true, CancellationToken cancellationToken = default)
     {
-        WerhouseItem item = await GetElementById(itemId, AsNoTracking, cancellationToken, c => c.checkpoints);
-        return item.checkpoints;
-            
+        WerhouseItem items = await GetElementById(itemId, AsNoTracking, cancellationToken, c => c.checkpoints);
+        return items.checkpoints;
     }
-
     public async Task<IEnumerable<WerhouseItem>> GetItemsByCondition(bool AsNoTracking, Expression<Func<WerhouseItem, bool>> condition = default!, CancellationToken cancellationToken = default)
     {
-        
-        return await GetElements(condition,AsNoTracking, cancellationToken, c => c.checkpoints);
+
+        return await GetElements(condition, AsNoTracking, cancellationToken, c => c.checkpoints);
     }
 
     public async Task<WerhouseItem> GetNewItem(Guid productId, CancellationToken cancellationToken = default)
     {
+        JsonDocument doc = await Constants.WerhouseController.Get($"products/get?input={productId}",cancellationToken);
+        JsonElement productElement = doc.RootElement.GetProperty("output");
+        if (productElement.ValueKind == JsonValueKind.Null)
+        {
+            throw new ProductNotFoundException(productId);
+        }
+        Console.WriteLine(productElement.ToString());
+
+
         WerhouseItem newItem = WerhouseItem.Create(productId);
 
         await CreateElement(newItem, cancellationToken);

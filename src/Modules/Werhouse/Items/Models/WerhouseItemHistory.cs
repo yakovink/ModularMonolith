@@ -1,9 +1,10 @@
 using System;
 using System.Text.Json.Serialization;
+using Werhouse.Items.Dtos;
 
 namespace Werhouse.Items.Models;
 
-public class WerhouseItemHistory : Entity<Guid>
+public class WerhouseItemHistory : Entity<Guid>,WerhouseModuleStructre.History
 {
     public int? In { get; private set; } = default!;
     public int? Out { get; private set; } = default!;
@@ -26,6 +27,19 @@ public class WerhouseItemHistory : Entity<Guid>
             WerhouseItemId = item.Id
         };
 
+    }
+
+    public WerhouseItemHistoryDto ToDto()
+    {
+        return new WerhouseItemHistoryDto
+        {
+            Id = Id,
+            In = In,
+            Out = Out,
+            Operation = operation,
+            description = description,
+            WerhouseItemId = WerhouseItemId
+        };
     }
      
 }
