@@ -1,10 +1,5 @@
 ﻿namespace Werhouse;
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Shared.GenericRootModule;
-using Werhouse.Data;
 
 public static class WerhouseModule
 {

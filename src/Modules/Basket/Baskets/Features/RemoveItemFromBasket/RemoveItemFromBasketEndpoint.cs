@@ -4,7 +4,7 @@ namespace Basket.Baskets.Features.RemoveItemFromBasket;
 
 
 
-public class RemoveItemFromBasketEndpoint : GenericDeleteEndpoint<ShoppingCartItemDto, bool>
+public class RemoveItemFromBasketEndpoint : BasketModuleStructre.RemoveItemFromBasket.MDeleteEndpoint
 {
     public RemoveItemFromBasketEndpoint() : base("/baskets/remove", "Remove Item From Basket")
     {
@@ -20,6 +20,6 @@ public class RemoveItemFromBasketEndpoint : GenericDeleteEndpoint<ShoppingCartIt
     {
 
         // Create the command
-        return await SendResults(new RemoveItemFromBasketCommand(request.input), sender);
+        return await SendResults(new BasketModuleStructre.RemoveItemFromBasket.Command(request.input), sender);
     }
 }

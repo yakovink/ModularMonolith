@@ -3,7 +3,7 @@
 namespace Catalog.Features.GetProductById;
 
 
-internal class GetProductByIdEndpoint: GenericGetEndpoint<Guid, ProductDto>
+internal class GetProductByIdEndpoint: CatalogModuleStructre.GetProductById.MGetEndpoint
 {
 
     public GetProductByIdEndpoint() : base(
@@ -17,6 +17,6 @@ internal class GetProductByIdEndpoint: GenericGetEndpoint<Guid, ProductDto>
 
     protected async override Task<IResult> NewEndpoint([FromQuery] Guid input, ISender sender)
     {
-        return await SendResults(new GetProductByIdQuery(input), sender);
+        return await SendResults(new CatalogModuleStructre.GetProductById.Query(input), sender);
     }
 }

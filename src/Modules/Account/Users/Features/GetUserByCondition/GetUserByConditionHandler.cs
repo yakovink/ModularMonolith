@@ -2,12 +2,11 @@
 
 namespace Account.Users.Features.GetUserByCondition;
 
-public record GetUserByConditionQuery(UserDto input) : IQuery<GenericResult<HashSet<UserDto>>>;
 
 public class GetUserByConditionHandler(AccountDbContext dbContext, ILogger<GetUserByConditionHandler> logger)
-    : IQueryHandler<GetUserByConditionQuery, GenericResult<HashSet<UserDto>>>
+    : AccountModuleStructre.GetUsersByCondition.IMEndpointGetHandler
 {
-    public async Task<GenericResult<HashSet<UserDto>>> Handle(GetUserByConditionQuery request, CancellationToken cancellationToken)
+    public async Task<GenericResult<HashSet<UserDto>>> Handle(AccountModuleStructre.GetUsersByCondition.Query request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling GetUserByConditionCommand with condition: {Condition}", request.input);
 

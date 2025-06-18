@@ -3,24 +3,22 @@
 namespace Basket.Baskets.Features.CreateBasket;
 
 
-public record CreateBasketCommand() : ICommand<GenericResult<Guid>>;
-public class CreateBasketCommandValidator : AbstractValidator<CreateBasketCommand>
+
+public class CreateBasketCommandValidator :  BasketModuleStructre.CreateBasket.MValidator
 {
     public CreateBasketCommandValidator()
     {
-        
 
     }
 }
 
 
 
-internal class CreateBasketHandler(IBasketRepository repository) : ICommandHandler<CreateBasketCommand, GenericResult<Guid>>
+internal class CreateBasketHandler(IBasketRepository repository) : BasketModuleStructre.CreateBasket.IMEndpointPostHandler
 {
-    public async Task<GenericResult<Guid>> Handle(CreateBasketCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<Guid>> Handle(BasketModuleStructre.CreateBasket.Command request, CancellationToken cancellationToken)
     {
-        ShoppingCart ShoppingCart = ShoppingCart.Create();
-        ShoppingCart=await repository.CreateElement(ShoppingCart);
-        return new GenericResult<Guid>(ShoppingCart.Id);
+        ShoppingCart cart = await repository.CreateBasket(cancellationToken);
+        return new GenericResult<Guid>(cart.Id);
     }
 }

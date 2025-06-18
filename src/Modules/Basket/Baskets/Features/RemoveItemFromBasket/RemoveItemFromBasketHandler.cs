@@ -2,9 +2,8 @@
 
 namespace Basket.Baskets.Features.RemoveItemFromBasket;
 
-public record RemoveItemFromBasketCommand(ShoppingCartItemDto input) : ICommand<GenericResult<bool>>;
 
-public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBasketCommand>
+public class RemoveItemFromBasketValidator : BasketModuleStructre.RemoveItemFromBasket.MValidator
 {
     public RemoveItemFromBasketValidator()
     {   
@@ -13,16 +12,16 @@ public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBas
         RuleFor(x => x.input.ProductId).NotEmpty().WithMessage("Product ID is required.");
     }
 }
-internal class RemoveItemFromBasketHandler(IBasketRepository repository) : ICommandHandler<RemoveItemFromBasketCommand, GenericResult<bool>>
+internal class RemoveItemFromBasketHandler(IBasketRepository repository) : BasketModuleStructre.RemoveItemFromBasket.IMEndpointDeleteHandler
 {
-    public async Task<GenericResult<bool>> Handle(RemoveItemFromBasketCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<bool>> Handle(BasketModuleStructre.RemoveItemFromBasket.Command request, CancellationToken cancellationToken)
     {
         ShoppingCartItemDto dto = request.input ?? throw new ArgumentNullException(nameof(dto));
         Guid shoppingCartId = dto.ShoppingCartId ?? throw new ArgumentNullException(nameof(dto.ShoppingCartId));
         Guid productId = dto.ProductId ?? throw new ArgumentNullException(nameof(dto.ProductId));
 
 
-        IEnumerable<ShoppingCartItem> items = await repository.GetCart(shoppingCartId,false,cancellationToken);
+        IEnumerable<ShoppingCartItem> items = (await repository.GetCartById(shoppingCartId,false,cancellationToken)).items;
         Console.WriteLine($"cart {shoppingCartId} have {items.Count()} items");
         ShoppingCartItem item = items.Where(i => i.ProductId == productId).SingleOrDefault()??
             throw new NotFoundException($"item {productId} was not found in cart {shoppingCartId}");

@@ -1,8 +1,8 @@
-using System;
+ 
 
 namespace Werhouse.Items.Features.GetNewItem;
 
-public class GetNewItemEndpoint : GenericPostEndpoint<Guid, Guid>
+public class GetNewItemEndpoint : WerhouseModuleStructre.GetNewItem.MPostEndpoint
 {
     public GetNewItemEndpoint() : base("/werhouse/getnew", "Get New Werhouse Item")
     {
@@ -13,7 +13,7 @@ public class GetNewItemEndpoint : GenericPostEndpoint<Guid, Guid>
 
     protected override async Task<IResult> NewEndpoint(GenericCommandRequest<Guid, Guid> request, ISender sender)
     {
-        return await SendResults(new GetNewItemCommand(request.input), sender);
+        return await SendResults(new WerhouseModuleStructre.GetNewItem.Command(request.input), sender);
     }
 }
 

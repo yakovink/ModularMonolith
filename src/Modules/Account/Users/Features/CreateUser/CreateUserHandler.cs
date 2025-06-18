@@ -2,11 +2,10 @@
 
 namespace Account.Users.Features.CreateUser;
 
-public record CreateUserCommand(UserDto input) : ICommand<GenericResult<Guid>>;
 public class CreateUserHandler(AccountDbContext dbContext, ILogger<CreateUserHandler> logger)
-    : ICommandHandler<CreateUserCommand, GenericResult<Guid>>
+    : AccountModuleStructre.CreateUser.IMEndpointPostHandler
 {
-    public async Task<GenericResult<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<Guid>> Handle(AccountModuleStructre.CreateUser.Command request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling CreateUserCommand for user with email: {Email}", request.input.Email);
 

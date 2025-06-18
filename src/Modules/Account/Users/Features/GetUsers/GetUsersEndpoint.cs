@@ -3,7 +3,7 @@
 namespace Account.Users.Features.GetUsers;
 
 
-internal class GetUsersEndpoint : GenericGetEndpoint<PaginationRequest, PaginatedResult<UserDto>>
+internal class GetUsersEndpoint : AccountModuleStructre.GetUsers.MGetEndpoint
 {
     public GetUsersEndpoint() : base("users", "Get Users")
     {
@@ -15,6 +15,6 @@ internal class GetUsersEndpoint : GenericGetEndpoint<PaginationRequest, Paginate
 
     protected async override Task<IResult> NewEndpoint(PaginationRequest input, ISender sender)
     {
-        return await SendResults(new GetUsersQuery(input), sender);
+        return await SendResults(new AccountModuleStructre.GetUsers.Query(input), sender);
     }
 }

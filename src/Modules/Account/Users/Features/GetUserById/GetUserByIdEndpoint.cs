@@ -4,8 +4,7 @@ namespace Account.Users.Features.GetUserById;
 
 
 
-internal class GetUserByIdEndpoint : GenericGetEndpoint<Guid, UserDto>
-{
+internal class GetUserByIdEndpoint : AccountModuleStructre.GetUserById.MGetEndpoint{
     public GetUserByIdEndpoint() : base("users/get", "Get User by ID")
     {
         this.serviceNames = new List<string>
@@ -16,7 +15,7 @@ internal class GetUserByIdEndpoint : GenericGetEndpoint<Guid, UserDto>
 
     protected async override Task<IResult> NewEndpoint(Guid input, ISender sender)
     {
-        return await SendResults(new GetUserByIdQuery(input), sender);
+        return await SendResults(new AccountModuleStructre.GetUserById.Query(input), sender);
     }
 
 

@@ -4,7 +4,7 @@ namespace Catalog.Features.GetProductsByCondition;
 
 
 
-internal class GetProductByConditionEndpoint: GenericGetEndpoint<ProductDto, HashSet<ProductDto>>
+internal class GetProductByConditionEndpoint: CatalogModuleStructre.GetProductsByCondition.MGetEndpoint
 {
     public GetProductByConditionEndpoint() : base(
         "/products/condition",
@@ -18,6 +18,6 @@ internal class GetProductByConditionEndpoint: GenericGetEndpoint<ProductDto, Has
 
     protected async override Task<IResult> NewEndpoint(ProductDto request, ISender sender)
     {
-        return await SendResults(new GetProductsByConditionQuery(request),sender);
+        return await SendResults(new CatalogModuleStructre.GetProductsByCondition.Query(request),sender);
     }
 }

@@ -1,15 +1,15 @@
 
 namespace Catalog.Features.GetProducts;
 
-public record GetProductsQuery(PaginationRequest request): IQuery<GenericResult<PaginatedResult<ProductDto>>>;
+
 internal class GetProductsHandler(CatalogDbContext dbContext) 
-: IQueryHandler<GetProductsQuery, GenericResult<PaginatedResult<ProductDto>>>
+: CatalogModuleStructre.GetProducts.IMEndpointGetHandler
 {
-    public async Task<GenericResult<PaginatedResult<ProductDto>>> Handle(GetProductsQuery query,
+    public async Task<GenericResult<PaginatedResult<ProductDto>>> Handle(CatalogModuleStructre.GetProducts.Query request,
                   CancellationToken cancellationToken)
     {
-        var pageIndex = query.request.PageIndex;
-        var pageSize = query.request.PageSize;
+        var pageIndex = request.input.PageIndex;
+        var pageSize = request.input.PageSize;
         var TotalCount = await dbContext.Products.CountAsync(cancellationToken);
 
 

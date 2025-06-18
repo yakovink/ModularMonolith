@@ -1,27 +1,22 @@
-using System;
-using Werhouse.Data.Repositories;
-using Werhouse.Items.Dtos;
-using Werhouse.Items.Models;
 
 namespace Werhouse.Items.Features.PerformOperation;
 
-public record PerformOperationCommand(WerhouseItemHistoryDto ItemHistoryDto) : ICommand<GenericResult<Guid>>;
 
-public class PerformOperationHandler(IWerhouseRepository repository) : ICommandHandler<PerformOperationCommand, GenericResult<Guid>>
+public class PerformOperationHandler(IWerhouseRepository repository) : WerhouseModuleStructre.PerformOperation.IMEndpointPostHandler
 {
-    public async Task<GenericResult<Guid>> Handle(PerformOperationCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<Guid>> Handle(WerhouseModuleStructre.PerformOperation.Command request, CancellationToken cancellationToken)
     {
-        if (request.ItemHistoryDto == null)
+        if (request.input == null)
         {
-            throw new ArgumentNullException(nameof(request.ItemHistoryDto), "Item history cannot be null");
+            throw new ArgumentNullException(nameof(request.input), "Item history cannot be null");
         }
 
-        WerhouseItem item = (await repository.GetItemsByCondition(false, i => i.Id == request.ItemHistoryDto.WerhouseItemId, cancellationToken)).SingleOrDefault() ?? throw new NotFoundException($"Item with id {request.ItemHistoryDto.WerhouseItemId} not found");
+        WerhouseItem item = (await repository.GetItemsByCondition(false, i => i.Id == request.input.WerhouseItemId, cancellationToken)).SingleOrDefault() ?? throw new NotFoundException($"Item with id {request.input.WerhouseItemId} not found");
         WerhouseItemHistory itemHistory = WerhouseItemHistory.Create(
-            request.ItemHistoryDto.In,
-            request.ItemHistoryDto.Out,
-            request.ItemHistoryDto.Operation,
-            request.ItemHistoryDto.description,
+            request.input.In,
+            request.input.Out,
+            request.input.Operation,
+            request.input.description,
             item
         );
         Guid itemHistoryId = await repository.PerformItemOperation(itemHistory, cancellationToken);

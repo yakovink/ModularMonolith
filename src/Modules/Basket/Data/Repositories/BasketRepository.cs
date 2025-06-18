@@ -4,7 +4,7 @@ using Shared.Data;
 
 namespace Basket.Data.Repositories;
 
-public class BasketRepository(BasketDbContext dbContext) : GenericRepository<ShoppingCart,BasketDbContext>(dbContext),IBasketRepository
+public class BasketRepository(BasketDbContext dbContext) : BasketModuleStructre.MBasketRepository(dbContext), IBasketRepository
 {
     public async Task<ShoppingCartItem> AddItem(ShoppingCartItem item, CancellationToken cancellationToken = default)
     {
@@ -17,10 +17,21 @@ public class BasketRepository(BasketDbContext dbContext) : GenericRepository<Sho
         return item;
     }
 
-    public async Task<IEnumerable<ShoppingCartItem>> GetCart(Guid cartId, bool AsNoTracking, CancellationToken cancellationToken)
+    public async Task<ShoppingCart> CreateBasket(CancellationToken cancellationToken)
+
     {
-        ShoppingCart cart = await GetElementById(cartId, AsNoTracking, cancellationToken, c => c.items)??throw new Exception($"Shopping cart with ID {cartId} not found.");
-        return cart.items;
+        return await CreateElement(ShoppingCart.Create(), cancellationToken);
+    }
+
+    public async Task<bool> DeleteBasket(Guid cartId, CancellationToken cancellationToken)
+    {
+        return await DeleteElement(cartId, cancellationToken);
+    }
+
+    public async Task<ShoppingCart> GetCartById(Guid cartId, bool AsNoTracking, CancellationToken cancellationToken)
+    {
+        return await GetElementById(cartId, AsNoTracking, cancellationToken, c => c.items)??throw new Exception($"Shopping cart with ID {cartId} not found.");
+  
     }
 
     public async Task<bool> ReloadItems(ShoppingCart cart, CancellationToken cancellationToken = default)

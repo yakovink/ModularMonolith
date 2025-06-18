@@ -5,7 +5,7 @@ namespace Basket.Baskets.Features.CreateBasket;
 
 
 
-internal class CreateBasketEndpoint : GenericPostEndpoint<object, Guid>
+internal class CreateBasketEndpoint : BasketModuleStructre.CreateBasket.MPostEndpoint
 {
     public CreateBasketEndpoint() : base("/baskets/create", "Create Basket")
     {
@@ -15,8 +15,8 @@ internal class CreateBasketEndpoint : GenericPostEndpoint<object, Guid>
         };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<object, Guid> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<bool, Guid> request, ISender sender)
     {
-        return await SendResults(new CreateBasketCommand(), sender);
+        return await SendResults(new BasketModuleStructre.CreateBasket.Command(request.input), sender);
     }
 }

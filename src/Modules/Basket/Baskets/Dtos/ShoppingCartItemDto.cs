@@ -2,7 +2,7 @@
 
 namespace Basket.Baskets.Dtos;
 
-public record ShoppingCartItemDto
+public record ShoppingCartItemDto : BasketModuleStructre.ICartItemConfigurations.MDto
 {
     public Guid? Id { get; set; }
     public Guid? ProductId { get; set; }

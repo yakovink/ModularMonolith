@@ -10,6 +10,6 @@ internal class GetItemByIdEndpoint : WerhouseModuleStructre.GetItemById.MGetEndp
 
     protected override Task<IResult> NewEndpoint(Guid input, ISender sender)
     {
-        return SendResults(new GetItemByIdQuery(input), sender);
+        return SendResults(new WerhouseModuleStructre.GetItemById.Query(input), sender);
     }
 }

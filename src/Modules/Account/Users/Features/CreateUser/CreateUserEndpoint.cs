@@ -5,7 +5,7 @@ namespace Account.Users.Features.CreateUser;
 
 
 
-internal class CreateUserEndpoint : GenericPostEndpoint<UserDto, Guid>
+internal class CreateUserEndpoint : AccountModuleStructre.CreateUser.MPostEndpoint
 {
     public CreateUserEndpoint() : base("users/create", "Create User")
     {
@@ -18,6 +18,6 @@ internal class CreateUserEndpoint : GenericPostEndpoint<UserDto, Guid>
 
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<UserDto, Guid> request, ISender sender)
     {
-        return await SendResults(new CreateUserCommand(request.input), sender);
+        return await SendResults(new AccountModuleStructre.CreateUser.Command(request.input), sender);
     }
 }

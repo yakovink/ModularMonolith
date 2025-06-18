@@ -2,7 +2,7 @@
 
 namespace Catalog.Products.Dtos;
 
-public record ProductDto
+public record ProductDto : CatalogModuleStructre.IMModelConfiguration.MDto
 {
     public Guid? Id { get; set; }
     public string? Name { get; set; }

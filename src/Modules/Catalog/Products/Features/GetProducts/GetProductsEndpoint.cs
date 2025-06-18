@@ -4,7 +4,7 @@ namespace Catalog.Features.GetProducts;
 
 
 
-internal class GetProductsEndpoint:GenericGetEndpoint<PaginationRequest, PaginatedResult<ProductDto>>
+internal class GetProductsEndpoint: CatalogModuleStructre.GetProducts.MGetEndpoint
 {
     public GetProductsEndpoint() : base(
         "/products",
@@ -19,7 +19,7 @@ internal class GetProductsEndpoint:GenericGetEndpoint<PaginationRequest, Paginat
     protected async override Task<IResult> NewEndpoint(PaginationRequest request, ISender sender)
     {
 
-        return await SendResults(new GetProductsQuery(request), sender);
+        return await SendResults(new CatalogModuleStructre.GetProducts.Query (request), sender);
 
     }
 }

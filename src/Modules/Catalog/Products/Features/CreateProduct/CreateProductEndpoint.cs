@@ -6,7 +6,7 @@ namespace Catalog.Features.CreateProduct;
 
 
 
-internal class CreateProductEndpoint : GenericPostEndpoint<ProductDto, Guid>
+internal class CreateProductEndpoint : CatalogModuleStructre.CreateProduct.MPostEndpoint
 {
 
     public CreateProductEndpoint() : base(
@@ -20,7 +20,7 @@ internal class CreateProductEndpoint : GenericPostEndpoint<ProductDto, Guid>
 
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ProductDto,Guid> request, ISender sender)
     {
-        return await SendResults(new CreateProductCommand(request.input), sender);
+        return await SendResults(new CatalogModuleStructre.CreateProduct.Command(request.input), sender);
     }
 
 

@@ -1,7 +1,9 @@
 
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 namespace Account.Data.Configurations;
 
-public class UserConfigurauions : IEntityTypeConfiguration<User>
+public class UserConfigurauions : AccountModuleStructre.IAccountConfigurations.IMDataConfiguration
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -26,4 +28,6 @@ public class UserConfigurauions : IEntityTypeConfiguration<User>
         
         builder.Property(e => e.address).HasMaxLength(200);
     }
+
+
 }

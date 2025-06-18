@@ -1,20 +1,16 @@
 namespace Catalog.Features.GetProductsByCondition;
 
-public record GetProductsByConditionQuery
-    (ProductDto input)
-    : IQuery<GenericResult<HashSet<ProductDto>>>;
 
 
-
-public class GetProductsByConditionHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductsByConditionQuery, GenericResult<HashSet<ProductDto>>>
+public class GetProductsByConditionHandler(CatalogDbContext dbContext) : CatalogModuleStructre.GetProductsByCondition.IMEndpointGetHandler
 {
-    public async Task<GenericResult<HashSet<ProductDto>>> Handle(GetProductsByConditionQuery Query,
+    public async Task<GenericResult<HashSet<ProductDto>>> Handle(CatalogModuleStructre.GetProductsByCondition.Query request,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
         HashSet<Product> products = await dbContext.Products.AsNoTracking().ToHashSetAsync(cancellationToken);
         //filter the products by the condition
-        products = filterProducts(products, Query.input);
+        products = filterProducts(products, request.input);
         //map the products to DTOs
         HashSet<ProductDto> productsDto = mapProducts(products);
         //return the result

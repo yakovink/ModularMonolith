@@ -6,7 +6,7 @@ using Shared.Data;
 
 namespace Basket.Data.Repositories;
 
-public class CachedBasketRepository(BasketRepository repository, IDistributedCache cache) : GenericCachedRepository<ShoppingCart,BasketDbContext>(repository,cache),IBasketRepository
+public class CachedBasketRepository(BasketRepository repository, IDistributedCache cache) : BasketModuleStructre.MBasketCachedRepository(repository, cache), IBasketRepository
 {
     public async Task<ShoppingCartItem> AddItem(ShoppingCartItem item, CancellationToken cancellationToken = default)
     {
@@ -20,10 +20,20 @@ public class CachedBasketRepository(BasketRepository repository, IDistributedCac
 
     }
 
-    public async Task<IEnumerable<ShoppingCartItem>> GetCart(Guid cartId, bool AsNoTracking, CancellationToken cancellationToken)
+    public async Task<ShoppingCart> CreateBasket(CancellationToken cancellationToken)
     {
-        ShoppingCart cart = await GetElementById(cartId, AsNoTracking, cancellationToken, c => c.items);
-        return cart.items;
+        return await CreateElement(ShoppingCart.Create(), cancellationToken);
+    }
+
+    public async Task<bool> DeleteBasket(Guid cartId, CancellationToken cancellationToken)
+    {
+        return await DeleteElement(cartId, cancellationToken);
+    }
+
+    public async Task<ShoppingCart> GetCartById(Guid cartId, bool AsNoTracking, CancellationToken cancellationToken)
+    {
+        return await GetElementById(cartId, AsNoTracking, cancellationToken, c => c.items);
+
     }
 
     public async Task<bool> ReloadItems(ShoppingCart cart, CancellationToken cancellationToken = default)

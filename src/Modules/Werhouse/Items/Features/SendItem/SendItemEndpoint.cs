@@ -1,9 +1,9 @@
-using System;
-using Werhouse.Items.Dtos;
+
+using Microsoft.AspNetCore;
 
 namespace Werhouse.Items.Features.SendItem;
 
-internal class SendItemEndpoint : GenericPutEndpoint<WerhouseItemDto, bool>
+internal class SendItemEndpoint : WerhouseModuleStructre.SendItem.MPutEndpoint
 {
     public SendItemEndpoint() : base("/werhouse/send", "Send item")
     {
@@ -15,6 +15,8 @@ internal class SendItemEndpoint : GenericPutEndpoint<WerhouseItemDto, bool>
 
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<WerhouseItemDto, bool> request, ISender sender)
     {
-        return await SendResults(new SendItemCommand(request.input), sender);
+        return await SendResults(new WerhouseModuleStructre.SendItem.Command(request.input), sender);
     }
+
+
 }

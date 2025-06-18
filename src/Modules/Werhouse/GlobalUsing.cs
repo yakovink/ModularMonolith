@@ -40,6 +40,12 @@ global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 global using Microsoft.AspNetCore.Mvc;
 global using Shared.Communicate;
+global using Microsoft.Extensions.Caching.Distributed;
+global using Shared.Mechanism;
+global using Werhouse.Items.Dtos;
+global using Werhouse.Items.Models;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
 
 public static class Constants
 {

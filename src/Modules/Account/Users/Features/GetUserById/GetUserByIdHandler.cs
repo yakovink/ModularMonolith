@@ -1,12 +1,11 @@
  
 
 namespace Account.Users.Features.GetUserById;
-public record GetUserByIdQuery(Guid input) : IQuery<GenericResult<UserDto >>;
 
 public class GetUserByIdHandler(AccountDbContext dbContext, ILogger<GetUserByIdHandler> logger)
-    : IQueryHandler<GetUserByIdQuery, GenericResult<UserDto >>
+    : AccountModuleStructre.GetUserById.IMEndpointGetHandler
 {
-    public async Task<GenericResult<UserDto >> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GenericResult<UserDto >> Handle(AccountModuleStructre.GetUserById.Query request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling GetUserByIdCommand for user with ID: {Id}", request.input);
 

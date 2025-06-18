@@ -4,7 +4,7 @@
 
 namespace Basket.Baskets.Models;
 
-public class ShoppingCartItem : Entity<Guid>
+public class ShoppingCartItem : Entity<Guid>, BasketModuleStructre.CartItem
 {
 
     public Guid ShoppingCartId { get; private set; } = default!;

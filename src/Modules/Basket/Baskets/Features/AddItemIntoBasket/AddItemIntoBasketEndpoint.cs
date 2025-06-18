@@ -3,7 +3,7 @@
 namespace Basket.Baskets.Features.AddItemIntoBasket;
 
 
-public class AddItemIntoBasketEndpoint : GenericPostEndpoint<ShoppingCartItemDto, Guid>
+public class AddItemIntoBasketEndpoint : BasketModuleStructre.AddItemIntoBasket.MPostEndpoint
 {
     public AddItemIntoBasketEndpoint() : base("/baskets/add", "Add Item Into Basket")
     {
@@ -16,6 +16,6 @@ public class AddItemIntoBasketEndpoint : GenericPostEndpoint<ShoppingCartItemDto
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ShoppingCartItemDto, Guid> request, [FromServices] ISender sender)
     {
         // Return the result
-        return await SendResults(new AddItemIntoBasketCommand(request.input),sender);
+        return await SendResults(new BasketModuleStructre.AddItemIntoBasket.Command(request.input),sender);
     }
 }

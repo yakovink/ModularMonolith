@@ -1,9 +1,9 @@
-using System;
-using Werhouse.Items.Dtos;
+ 
 
 namespace Werhouse.Items.Features.PerformOperation;
 
-internal class PerformOperationEndpoint : GenericPostEndpoint<WerhouseItemHistoryDto, Guid>
+
+internal class PerformOperationEndpoint : WerhouseModuleStructre.PerformOperation.MPostEndpoint
 {
 
     public PerformOperationEndpoint() : base("/werhouse/operation", "Perform Operation on Werhouse Item")
@@ -13,6 +13,6 @@ internal class PerformOperationEndpoint : GenericPostEndpoint<WerhouseItemHistor
 
     protected override async Task<IResult> NewEndpoint(GenericCommandRequest<WerhouseItemHistoryDto, Guid> request, ISender sender)
     {
-        return await SendResults(new PerformOperationCommand(request.input), sender);
+        return await SendResults(new WerhouseModuleStructre.PerformOperation.Command(request.input), sender);
     }
 }

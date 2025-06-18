@@ -1,12 +1,8 @@
 
 namespace Werhouse.Data;
 
-public class WerhouseDbContext : WerhouseModuleStructre.MWerhouseDbContext
+public class WerhouseDbContext(DbContextOptions<WerhouseDbContext> options) : WerhouseModuleStructre.MWerhouseDbContext(options)
 {
-    public WerhouseDbContext(DbContextOptions<WerhouseDbContext> options)
-        : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

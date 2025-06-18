@@ -3,7 +3,7 @@
 namespace Catalog.Features.DeleteProduct;
 
 
-public class DeleteProductEndpoint:GenericDeleteEndpoint<Guid,bool>
+public class DeleteProductEndpoint:CatalogModuleStructre.DeleteProduct.MDeleteEndpoint
 {
     public DeleteProductEndpoint() : base(
         "/products/delete",
@@ -17,6 +17,6 @@ public class DeleteProductEndpoint:GenericDeleteEndpoint<Guid,bool>
 
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<Guid,bool> request, ISender sender)
     {
-        return await SendResults(new DeleteProductCommand(request.input), sender);
+        return await SendResults(new CatalogModuleStructre.DeleteProduct.Command(request.input), sender);
     }
 }

@@ -6,15 +6,8 @@ locations to transfer messages betwen components
 */
 namespace Catalog.Features.CreateProduct;
 
-public record CreateProductCommand
-    (ProductDto input)
-    : ICommand<GenericResult<Guid>>;
 
-
-
-
-
-public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+public class CreateProductCommandValidator : CatalogModuleStructre.CreateProduct.MValidator
 {
     public CreateProductCommandValidator()
     {
@@ -38,9 +31,9 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 
 internal class CreateProductHandler(CatalogDbContext dbContext,
-ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, GenericResult<Guid>>
+ILogger<CreateProductHandler> logger) : CatalogModuleStructre.CreateProduct.IMEndpointPostHandler
 {
-    public async Task<GenericResult<Guid>> Handle(CreateProductCommand command,
+    public async Task<GenericResult<Guid>> Handle(CatalogModuleStructre.CreateProduct.Command command,
                  CancellationToken cancellationToken)
     {
 

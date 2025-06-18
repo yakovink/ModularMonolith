@@ -1,16 +1,10 @@
-using System;
-using Werhouse.Data.Repositories;
-using Werhouse.Items.Dtos;
-using Werhouse.Items.Models;
 
 namespace Werhouse.Items.Features.SendItem;
 
-public record SendItemCommand(WerhouseItemDto input) : GenericCommandRequest<WerhouseItemDto, GenericResult<bool>>(input);
 
-
-public class SendItemHandler(IWerhouseRepository repository) : ICommandHandler<SendItemCommand, GenericResult<bool>>
+public class SendItemHandler(IWerhouseRepository repository) : WerhouseModuleStructre.SendItem.IMEndpointPutHandler
 {
-    public async Task<GenericResult<bool>> Handle(SendItemCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<bool>> Handle(WerhouseModuleStructre.SendItem.Command request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request.input.id);
         ArgumentNullException.ThrowIfNull(request.input.InvoiceId);

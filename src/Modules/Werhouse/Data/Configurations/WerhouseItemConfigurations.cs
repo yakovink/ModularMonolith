@@ -1,9 +1,7 @@
-using System;
-using Werhouse.Items.Models;
 
 namespace Werhouse.Data.Configurations;
 
-public class WerhouseItemConfigurations : IEntityTypeConfiguration<WerhouseItem>
+public class WerhouseItemConfigurations : WerhouseModuleStructre.IWerhouseItemConfigurations.IMDataConfiguration
 {
     public void Configure(EntityTypeBuilder<WerhouseItem> builder)
     {

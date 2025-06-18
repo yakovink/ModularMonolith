@@ -3,12 +3,10 @@
 
 namespace Account.Users.Features.ChangePassword;
 
-public record ChangePasswordCommand(PasswordDto input) : ICommand<GenericResult<bool>>;
 
-
-public class ChangePasswordHandler(AccountDbContext dbContext,ILogger<ChangePasswordHandler> logger) : ICommandHandler<ChangePasswordCommand, GenericResult<bool>>
+public class ChangePasswordHandler(AccountDbContext dbContext,ILogger<ChangePasswordHandler> logger) : AccountModuleStructre.ChangePassword.IMEndpointPostHandler
 {
-    public async Task<GenericResult<bool>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    public async Task<GenericResult<bool>> Handle(AccountModuleStructre.ChangePassword.Command request, CancellationToken cancellationToken)
     {
 
 

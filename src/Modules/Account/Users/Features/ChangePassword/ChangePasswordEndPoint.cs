@@ -2,7 +2,7 @@
 namespace Account.Users.Features.ChangePassword;
 
 
-internal class ChangePasswordEndPoint : GenericPutEndpoint<PasswordDto,bool>
+internal class ChangePasswordEndPoint : AccountModuleStructre.ChangePassword.MPostEndpoint
 {
     public ChangePasswordEndPoint() : base("users/pass", "Change Password")
     {
@@ -13,6 +13,6 @@ internal class ChangePasswordEndPoint : GenericPutEndpoint<PasswordDto,bool>
 
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<PasswordDto, bool> request, ISender sender)
     {
-        return await SendResults(new ChangePasswordCommand(request.input), sender);
+        return await SendResults(new AccountModuleStructre.ChangePassword.Command(request.input), sender);
     }
 }

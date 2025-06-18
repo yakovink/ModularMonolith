@@ -1,12 +1,9 @@
 
 namespace Account.Data;
 
-public class AccountDbContext : DbContext
+public class AccountDbContext(DbContextOptions<AccountDbContext> options) :  AccountModuleStructre.MAccountDbContext(options)
 {
-    public AccountDbContext(DbContextOptions<AccountDbContext> options)
-        : base(options)
-    {
-    }
+
     public DbSet<User> Users { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

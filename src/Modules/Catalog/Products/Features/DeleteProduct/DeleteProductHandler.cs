@@ -1,12 +1,7 @@
 namespace Catalog.Features.DeleteProduct;
 
-public record DeleteProductCommand
-    (Guid input)
-    : ICommand<GenericResult<bool>>;
 
-
-
-public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
+public class DeleteProductCommandValidator : CatalogModuleStructre.DeleteProduct.MValidator
 {
     public DeleteProductCommandValidator()
     {
@@ -16,9 +11,9 @@ public class DeleteProductCommandValidator : AbstractValidator<DeleteProductComm
     }
 }
 
-internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandler<DeleteProductCommand, GenericResult<bool>>
+internal class DeleteProductHandler(CatalogDbContext dbContext) : CatalogModuleStructre.DeleteProduct.IMEndpointDeleteHandler
 {
-    public async Task<GenericResult<bool>> Handle(DeleteProductCommand command,
+    public async Task<GenericResult<bool>> Handle(CatalogModuleStructre.DeleteProduct.Command command,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID

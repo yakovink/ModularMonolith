@@ -2,7 +2,7 @@
 namespace Account.Users.Features.GetUserByCondition;
 
 
-internal class GetUserByConditionEndpoint : GenericGetEndpoint<UserDto, HashSet<UserDto>>
+internal class GetUserByConditionEndpoint : AccountModuleStructre.GetUsersByCondition.MGetEndpoint
 {
 
     public GetUserByConditionEndpoint() : base("users/condition", "Get users by condition")
@@ -15,6 +15,6 @@ internal class GetUserByConditionEndpoint : GenericGetEndpoint<UserDto, HashSet<
     }
     protected async override Task<IResult> NewEndpoint(UserDto input, ISender sender)
     {
-        return await SendResults(new GetUserByConditionQuery(input), sender);
+        return await SendResults(new AccountModuleStructre.GetUsersByCondition.Query(input), sender);
     }
 }

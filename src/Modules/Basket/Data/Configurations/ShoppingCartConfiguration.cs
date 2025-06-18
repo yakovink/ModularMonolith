@@ -2,7 +2,7 @@
 
 namespace Basket.Data.Configurations;
 
-public class ShoppingCartConfiguration : IEntityTypeConfiguration<ShoppingCart>
+public class ShoppingCartConfiguration : BasketModuleStructre.ICartConfigurations.IMDataConfiguration
 {
     public void Configure(EntityTypeBuilder<ShoppingCart> builder)
     {

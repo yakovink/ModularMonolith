@@ -1,12 +1,12 @@
 
+using Shared.Data;
+
 namespace Catalog.Data;
 
-public class CatalogDbContext:DbContext
+public class CatalogDbContext(DbContextOptions<CatalogDbContext> options): CatalogModuleStructre.MCatalogDbContext(options)
 {
 
-    public CatalogDbContext(DbContextOptions<CatalogDbContext> options):base(options)
-    {
-    }
+
 
     public DbSet<Product> Products { get; set; }=default!;
     //public DbSet<ProductCategory> ProductCategories { get; set; }=default!;

@@ -2,15 +2,12 @@
 
 
 namespace Catalog.Features.GetProductById;
-public record GetProductByIdQuery
-    (Guid input)
-    : IQuery<GenericResult<ProductDto>>;
 
 
-internal class GetProductByIdHandler(CatalogDbContext dbContext) : IQueryHandler<GetProductByIdQuery, GenericResult<ProductDto>>
+internal class GetProductByIdHandler(CatalogDbContext dbContext) : CatalogModuleStructre.GetProductById.IMEndpointGetHandler
 {
 
-    public async Task<GenericResult<ProductDto>> Handle(GetProductByIdQuery query,
+    public async Task<GenericResult<ProductDto>> Handle(CatalogModuleStructre.GetProductById.Query query,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID

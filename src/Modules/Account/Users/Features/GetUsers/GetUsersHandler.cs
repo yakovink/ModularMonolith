@@ -1,12 +1,12 @@
- 
+
+
 
 namespace Account.Users.Features.GetUsers;
 
-public record GetUsersQuery(PaginationRequest input) : IQuery<GenericResult<PaginatedResult<UserDto> >>;
-public class GetUsersHandler(AccountDbContext dbContext, ILogger<GetUsersHandler> logger) 
-    : IQueryHandler<GetUsersQuery, GenericResult<PaginatedResult<UserDto> >>
+
+public class GetUsersHandler(AccountDbContext dbContext, ILogger<GetUsersHandler> logger) :AccountModuleStructre.GetUsers.IMEndpointGetHandler
 {
-    public async Task<GenericResult<PaginatedResult<UserDto> >> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<GenericResult<PaginatedResult<UserDto> >> Handle(AccountModuleStructre.GetUsers.Query request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling GetUsersQuery with pagination request: {Request}", request.input);
 
@@ -24,5 +24,7 @@ public class GetUsersHandler(AccountDbContext dbContext, ILogger<GetUsersHandler
         
         return new GenericResult<PaginatedResult<UserDto> >(paginatedResult);
     }
+
+
 }
 
