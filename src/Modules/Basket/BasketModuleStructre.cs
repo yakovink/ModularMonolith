@@ -1,5 +1,6 @@
-using System;
+using Shared.Data;
 using Shared.Mechanism;
+using System;
 
 namespace Basket;
 
@@ -22,11 +23,18 @@ public class BasketModuleStructre : ModuleMechanism<ShoppingCart>
 
 
     //repositories
-    public interface IMBasketRepository : IMModelConfiguration.IMRepository;
+    public abstract class BasketRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R, BasketDbContext>(repository) where R : class, IGenericRepository<ShoppingCart>;
 
-    public abstract class MBasketRepository(BasketDbContext dbContext) : IMModelConfiguration.MRepository<BasketDbContext>(dbContext);
 
-    public abstract class MBasketCachedRepository(MBasketRepository repository, IDistributedCache cache) : IMModelConfiguration.MCachedRepository<BasketDbContext>(repository, cache);
+    public class BasketSQLRepository(GenericDbContext<BasketDbContext> dbContext) :
+        BasketLocalRepository<GenericRepository<ShoppingCart, BasketDbContext>>(
+            new GenericRepository<ShoppingCart, BasketDbContext>(dbContext));
+
+
+    public class CachedBasketRepository(BasketSQLRepository repository, IDistributedCache cache) :
+        BasketLocalRepository<GenericCachedRepository<ShoppingCart, BasketDbContext>>(
+            new GenericCachedRepository<ShoppingCart, BasketDbContext>(repository.getMasterRepository(), cache));
+
 
 
     //commands

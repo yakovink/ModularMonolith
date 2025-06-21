@@ -1,27 +1,27 @@
 
+using Catalog.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace Catalog.Features.GetProducts;
 
 
-internal class GetProductsHandler(CatalogDbContext dbContext) 
+internal class GetProductsHandler(ICatalogRepository repository) 
 : CatalogModuleStructre.GetProducts.IMEndpointGetHandler
 {
     public async Task<GenericResult<PaginatedResult<ProductDto>>> Handle(CatalogModuleStructre.GetProducts.Query request,
                   CancellationToken cancellationToken)
     {
-        var pageIndex = request.input.PageIndex;
-        var pageSize = request.input.PageSize;
-        var TotalCount = await dbContext.Products.CountAsync(cancellationToken);
 
 
 
         //get the product entity ID
-        List<Product> products = await dbContext.Products
-            .AsNoTracking()
-            .OrderBy(P => P.Name)
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-        List<ProductDto> productsDto = mapProducts(products);
+        IEnumerable<Product> products = await repository.GetProducts(true, cancellationToken);
+
+        var pageIndex = request.input.PageIndex;
+        var pageSize = request.input.PageSize;
+        var TotalCount = products.Count();
+
+        List<ProductDto> productsDto = products.Adapt<IEnumerable<ProductDto>>().ToList();
 
         //create a paginated result
         PaginatedResult<ProductDto> paginatedResult = new PaginatedResult<ProductDto>
@@ -35,9 +35,5 @@ internal class GetProductsHandler(CatalogDbContext dbContext)
         return new GenericResult<PaginatedResult<ProductDto>>(paginatedResult);
     }
 
-    private List<ProductDto> mapProducts(List<Product> products)
-    {
-        return products.Adapt<List<ProductDto>>();
-    }
 
 }

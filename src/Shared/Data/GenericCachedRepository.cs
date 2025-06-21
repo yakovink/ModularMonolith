@@ -8,7 +8,7 @@ using Shared.Exceptions;
 
 namespace Shared.Data;
 
-public abstract class GenericCachedRepository<Model, Context>(GenericRepository<Model, Context> repository, IDistributedCache cache) : IGenericRepository<Model>
+public class GenericCachedRepository<Model, Context>(GenericRepository<Model, Context> repository, IDistributedCache cache) : IGenericRepository<Model>
 where Model : class, IEntity<Guid>
 where Context : DbContext
 {

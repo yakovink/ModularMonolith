@@ -12,17 +12,22 @@ public interface MEntityConfiguration;
 
 
 public interface MModelConfiguration<Model> : MModelConfiguration, MEntityConfiguration<Model>
-where Model : class, IAggregate<Guid>
+where Model : Aggregate<Guid>
 
 {
 
+    // dbcontext
     public abstract class MContext<MC>(DbContextOptions<MC> options, Type[] types) : GenericDbContext<MC>(options, types) where MC : GenericDbContext<MC>;
 
+
+    //repositories
     public interface IMRepository;
-    public abstract class MRepository<MC>(MC context) : GenericRepository<Model, MC>(context), IMRepository where MC : GenericDbContext<MC>;
 
-    public abstract class MCachedRepository<MC>(MRepository<MC> repository, IDistributedCache cache) : GenericCachedRepository<Model, MC>(repository, cache), IMRepository where MC : GenericDbContext<MC>;
+    public abstract class LocalRepository<R, MC>(R repository) : GenericLocalRepository<R,MC, Model>(repository)
+        where R : class , IGenericRepository<Model>;
 
+
+    //properties
     public interface Property : Property<Model>, IEntity<Guid>;
     
     public interface IMPropertyConfiguration<P> : MEntityConfiguration<P> where P : class, Property;

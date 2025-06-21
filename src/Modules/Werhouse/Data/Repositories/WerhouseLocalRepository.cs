@@ -1,19 +1,24 @@
- 
+
+
+using Shared.Data;
+using System.Runtime.CompilerServices;
 
 namespace Werhouse.Data.Repositories;
 
-public class WerhouseRepository(WerhouseDbContext dbContext) : WerhouseModuleStructre.MWerhouseRepository(dbContext), IWerhouseRepository
+public abstract class WerhouseLocalRepository<R>(R repository) : WerhouseModuleStructre.WerhouseRepository<R>(repository), IWerhouseRepository
+    where R : class, IGenericRepository<WerhouseItem>
 {
-
+    
     public async Task<IEnumerable<WerhouseItemHistory>> GetItemHistory(Guid itemId, bool AsNoTracking = true, CancellationToken cancellationToken = default)
     {
-        WerhouseItem items = await GetElementById(itemId, AsNoTracking, cancellationToken, c => c.checkpoints);
+        WerhouseItem items = await repository.GetElementById(itemId, AsNoTracking, cancellationToken, c => c.checkpoints);
+        
         return items.checkpoints;
     }
     public async Task<IEnumerable<WerhouseItem>> GetItemsByCondition(bool AsNoTracking, Expression<Func<WerhouseItem, bool>> condition = default!, CancellationToken cancellationToken = default)
     {
 
-        return await GetElements(condition, AsNoTracking, cancellationToken, c => c.checkpoints);
+        return await repository.GetElements(condition, AsNoTracking, cancellationToken, c => c.checkpoints);
     }
 
     public async Task<WerhouseItem> GetNewItem(Guid productId, CancellationToken cancellationToken = default)
@@ -29,9 +34,9 @@ public class WerhouseRepository(WerhouseDbContext dbContext) : WerhouseModuleStr
 
         WerhouseItem newItem = WerhouseItem.Create(productId);
 
-        await CreateElement(newItem, cancellationToken);
+        await repository.CreateElement(newItem, cancellationToken);
         // Reload the item as Tracked item
-        newItem = await GetElementById(newItem.Id, false, cancellationToken, c => c.checkpoints);
+        newItem = await repository.GetElementById(newItem.Id, false, cancellationToken, c => c.checkpoints);
         // Create a history entry for the new item
         WerhouseItemHistory history = WerhouseItemHistory.Create(null, 1, "Get In", $"New item created from ProductId {productId}", newItem);
         // Add the history entry to the item
@@ -42,21 +47,21 @@ public class WerhouseRepository(WerhouseDbContext dbContext) : WerhouseModuleStr
 
     public async Task<Guid> PerformItemOperation(WerhouseItemHistory itemHistory, CancellationToken cancellationToken = default)
     {
-        itemHistory = await AddElementToCollection(itemHistory,
+        itemHistory = await repository.AddElementToCollection(itemHistory,
          h => h.WerhouseItemId,
           h => h.Id == itemHistory.Id,
            h => h
            , cancellationToken);
         // Reload the item to get the updated checkpoints
-        WerhouseItem item = await GetElementById(itemHistory.WerhouseItemId, false, cancellationToken, c => c.checkpoints);
+        WerhouseItem item = await repository.GetElementById(itemHistory.WerhouseItemId, false, cancellationToken, c => c.checkpoints);
         item.UpdateWerhouse();
-        await SaveChangesAsync(item.Id, cancellationToken);
+        await repository.SaveChangesAsync(item.Id, cancellationToken);
         return itemHistory.Id;
     }
 
     public async Task<bool> ReloadItems(WerhouseItem item, CancellationToken cancellationToken = default)
     {
-        return await ReloadElementCollection(item, c => c.checkpoints, cancellationToken);
+        return await repository.ReloadElementCollection(item, c => c.checkpoints, cancellationToken);
     }
 
     public async Task<bool> SendItem(Guid ItemId, Guid InvoiceId, CancellationToken cancellationToken = default)

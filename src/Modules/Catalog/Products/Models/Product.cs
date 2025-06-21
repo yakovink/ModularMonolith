@@ -3,29 +3,25 @@ namespace Catalog.Products.Models;
 
 public class Product:Aggregate<Guid>   
 {
-    public string Name { get; private set; }=default!;
-    public List<ProductCategory> Categories { get; private set; }=new();
-    public decimal Price { get; private set; }
-    public string Description { get; private set; }=default!;
-    public string ImageFile { get;private set; }=default!;
+    public string Name { get; set; }=default!;
+    public List<ProductCategory> Categories { get; set; }=new();
+    public decimal Price { get; set; }
+    public string Description { get; set; }=default!;
+    public string ImageFile { get;set; }=default!;
 
-    public static Product Create(Guid id, string name, List<ProductCategory> categories, decimal price, string description, string imageFile)
+    public static Product Create(string name, List<ProductCategory> categories, decimal price, string description, string imageFile)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
 
         var product = new Product
         {
-            Id = id,
+            Id = Guid.NewGuid(),
             Name = name,
             Categories = categories,
             Price = price,
             Description = description,
-            ImageFile = imageFile,
-            _createdBy=Environment.UserName,
-            _createdDate=DateTime.UtcNow,
-            _lastModifiedBy=Environment.UserName,
-            _lastModifiedDate=DateTime.UtcNow
+            ImageFile = imageFile
         };
         product.AddDomainEvent(new ProductCreatedEvent(product));
         return product;

@@ -5,7 +5,7 @@ namespace Catalog.Features.UpdateProduct;
 
 
 
-internal class UpdateProductEndpoint: GenericPutEndpoint<ProductDto, bool>
+internal class UpdateProductEndpoint: CatalogModuleStructre.UpdateProduct.MPutEndpoint
 {
     public UpdateProductEndpoint() : base(
         "/products/update",
@@ -21,6 +21,6 @@ internal class UpdateProductEndpoint: GenericPutEndpoint<ProductDto, bool>
     protected async override Task<IResult> NewEndpoint(GenericCommandRequest<ProductDto,bool> request, ISender sender)
     {
 
-        return await SendResults(new UpdateProductCommand(request.input), sender);  
+        return await SendResults(new CatalogModuleStructre.UpdateProduct.Command (request.input), sender);  
     }
 }

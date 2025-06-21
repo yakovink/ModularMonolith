@@ -1,11 +1,20 @@
-using System;
-using Microsoft.Extensions.Caching.Distributed;
-using Shared.Mechanism;
+
+
+
+
+
 
 namespace Account;
 
 public class AccountModuleStructre : ModuleMechanism<User>
 {
+
+    //SubModel
+    public interface Activity : IMModelConfiguration.Property;
+
+    // submodel configuration
+
+    public interface IActivityConfigurations : IMModelConfiguration.IMPropertyConfiguration<UserActivity>;
 
 
 
@@ -17,11 +26,18 @@ public class AccountModuleStructre : ModuleMechanism<User>
 
 
     //repositories
-    public interface IMAccountRepository : IMModelConfiguration.IMRepository;
 
-    public abstract class MAccountRepository(AccountDbContext dbContext) : IMModelConfiguration.MRepository<AccountDbContext>(dbContext);
+    public abstract class AccountRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R,AccountDbContext>(repository) where R : class , IGenericRepository<User>;
 
-    public abstract class MAccountCachedRepository(MAccountRepository repository, IDistributedCache cache) : IMModelConfiguration.MCachedRepository<AccountDbContext>(repository, cache);
+
+    public class AccountSQLRepository(GenericDbContext<AccountDbContext> dbContext) :
+        AccountLocalRepository<GenericRepository<User, AccountDbContext>>(
+            new GenericRepository<User, AccountDbContext>(dbContext));
+
+
+    public class CachedAccountRepository(AccountSQLRepository repository, IDistributedCache cache) :
+        AccountLocalRepository<GenericCachedRepository<User, AccountDbContext>>(
+            new GenericCachedRepository<User, AccountDbContext>(repository.getMasterRepository(), cache));
 
 
     //commands
@@ -29,6 +45,8 @@ public class AccountModuleStructre : ModuleMechanism<User>
     public interface UpdateUser : MPut<UserDto, bool>;
     public interface DeleteUser : MDelete<Guid, bool>;
     public interface ChangePassword : MPost<PasswordDto, bool>;
+
+    public 
 
     //queries
     public interface GetUserById : MGet<Guid, UserDto>;

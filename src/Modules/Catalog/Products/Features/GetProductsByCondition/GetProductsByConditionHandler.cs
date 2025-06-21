@@ -1,32 +1,20 @@
+using Catalog.Data.Repositories;
+
 namespace Catalog.Features.GetProductsByCondition;
 
 
 
-public class GetProductsByConditionHandler(CatalogDbContext dbContext) : CatalogModuleStructre.GetProductsByCondition.IMEndpointGetHandler
+public class GetProductsByConditionHandler(ICatalogRepository repository) : CatalogModuleStructre.GetProductsByCondition.IMEndpointGetHandler
 {
     public async Task<GenericResult<HashSet<ProductDto>>> Handle(CatalogModuleStructre.GetProductsByCondition.Query request,
                   CancellationToken cancellationToken)
     {
         //get the product entity ID
-        HashSet<Product> products = await dbContext.Products.AsNoTracking().ToHashSetAsync(cancellationToken);
-        //filter the products by the condition
-        products = filterProducts(products, request.input);
+        IEnumerable<Product> products = await repository.GetProductByCondition(request.input, true, cancellationToken);
         //map the products to DTOs
-        HashSet<ProductDto> productsDto = mapProducts(products);
+        HashSet<ProductDto> productsDto = products.Adapt<IEnumerable<ProductDto>>().ToHashSet();
         //return the result
         return new GenericResult<HashSet<ProductDto>>(productsDto);
     }
 
-    private HashSet<ProductDto> mapProducts(HashSet<Product> products)
-    {
-        return products.Adapt<HashSet<ProductDto>>();
-    }
-
-    private HashSet<Product> filterProducts(HashSet<Product> products, ProductDto fake)
-    {
-        return products.Where(p => (fake.Name == null || p.Name.Contains(fake.Name)) &&
-            (fake.Categories == null || fake.Categories.All(c => p.Categories.Contains((ProductCategory)Enum.Parse(typeof(ProductCategory), c)))) &&
-            (p.Price == fake.Price || fake.Price == null) &&
-            (fake.Description == null || p.Description.Contains(fake.Description))).ToHashSet();
-    }
 }

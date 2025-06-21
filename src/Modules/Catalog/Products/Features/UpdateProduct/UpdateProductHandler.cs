@@ -1,9 +1,11 @@
 
 
+using Catalog.Data.Repositories;
+
 namespace Catalog.Features.UpdateProduct;
 
-public record UpdateProductCommand(ProductDto input) : ICommand<GenericResult<bool>>;
-public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+
+public class UpdateProductCommandValidator : CatalogModuleStructre.UpdateProduct.MValidator
 {
     public UpdateProductCommandValidator()
     {
@@ -20,54 +22,14 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     }
 }
 
-internal class UpdateProductHandler(CatalogDbContext dbContext) : ICommandHandler<UpdateProductCommand, GenericResult<bool>>
+internal class UpdateProductHandler(ICatalogRepository repository) : CatalogModuleStructre.UpdateProduct.IMEndpointPutHandler
 {
 
-    public async Task<GenericResult<bool>> Handle(UpdateProductCommand command,
+    public async Task<GenericResult<bool>> Handle(CatalogModuleStructre.UpdateProduct.Command command,
                   CancellationToken cancellationToken)
     {
-        //get the product entity
-        if (command.input.Id == null)
-        {
-            throw new InternalServerException("Generic validator cant catch the null product in request");
-        }
-
-        Guid id = (Guid)command.input.Id;
-
-
-        Product product = await dbContext.getProductById(id, cancellationToken, RequestType.Command);
-
-        if (product == null)
-        {
-            throw new ProductNotFoundException(id);
-        }
-        //update the product
-        UpdateProduct(product, command.input);
-        //save to db
-        await dbContext.SaveChangesAsync(cancellationToken);
-        //validate
-        bool success = await validate(product, cancellationToken);
+        bool success = await repository.UpdateProduct(command.input, cancellationToken);
         //return the result
         return new GenericResult<bool>(success);
-    }
-
-    private void UpdateProduct(Product product, ProductDto productDto)
-    {
-
-
-        //update the product entity
-        product.Update(
-            productDto.Name == null ? product.Name : productDto.Name,
-            productDto.Categories == null ? product.Categories : productDto.Categories.Select(s => (ProductCategory)Enum.Parse(typeof(ProductCategory), s)).ToList(),
-            productDto.Price == null ? product.Price : (decimal)productDto.Price,
-            productDto.Description == null ? product.Description : productDto.Description,
-            productDto.ImageUrl == null ? product.ImageFile : productDto.ImageUrl
-        );
-    }
-
-    private async Task<bool> validate(Product product, CancellationToken cancellationToken)
-    {
-        Product UpdatedProduct = await dbContext.getProductById(product.Id, cancellationToken, RequestType.Command);
-        return product.Compare(UpdatedProduct);
     }
 }

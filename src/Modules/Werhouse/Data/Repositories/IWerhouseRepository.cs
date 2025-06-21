@@ -3,7 +3,7 @@
 
 namespace Werhouse.Data.Repositories;
 
-public interface IWerhouseRepository : WerhouseModuleStructre.IMWerhouseRepository
+public interface IWerhouseRepository : WerhouseModuleStructre.IMModelConfiguration.IMRepository
 {
     public Task<IEnumerable<WerhouseItemHistory>> GetItemHistory(Guid itemId, bool AsNoTracking=true,CancellationToken cancellationToken = default);
     public Task<Guid> PerformItemOperation(WerhouseItemHistory itemHistory, CancellationToken cancellationToken = default);

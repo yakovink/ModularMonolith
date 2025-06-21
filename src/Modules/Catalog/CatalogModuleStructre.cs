@@ -1,6 +1,8 @@
-using System;
+using Catalog.Data.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
+using Shared.Data;
 using Shared.Mechanism;
+using System;
 
 namespace Catalog;
 
@@ -16,11 +18,17 @@ public class CatalogModuleStructre : ModuleMechanism<Product>
 
 
     //repositories
-    public interface IMCatalogRepository : IMModelConfiguration.IMRepository;
+    public abstract class CatalogRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R, CatalogDbContext>(repository) where R : class, IGenericRepository<Product>;
 
-    //public abstract class MCatalogRepository(CatalogDbContext dbContext) : IMModelConfiguration.MRepository<CatalogDbContext>(dbContext);
 
-    //public abstract class MCatalogCachedRepository(MCatalogRepository repository, IDistributedCache cache) : IMModelConfiguration.MCachedRepository<CatalogDbContext>(repository, cache);
+    public class CatalogSQLRepository(GenericDbContext<CatalogDbContext> dbContext) :
+        CatalogLocalRepository<GenericRepository<Product, CatalogDbContext>>(
+            new GenericRepository<Product, CatalogDbContext>(dbContext));
+
+
+    public class CachedCatalogRepository(CatalogSQLRepository repository, IDistributedCache cache) :
+        CatalogLocalRepository<GenericCachedRepository<Product, CatalogDbContext>>(
+            new GenericCachedRepository<Product, CatalogDbContext>(repository.getMasterRepository(), cache));
 
     //commands
     public interface CreateProduct : MPost<ProductDto, Guid>;

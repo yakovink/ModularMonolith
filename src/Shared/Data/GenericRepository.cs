@@ -4,7 +4,7 @@ using Shared.Exceptions;
 
 namespace Shared.Data;
 
-public abstract class GenericRepository<Model, Context>(GenericDbContext<Context> dbContext) : IGenericRepository<Model>
+public class GenericRepository<Model, Context>(GenericDbContext<Context> dbContext) : IGenericRepository<Model>
     where Model : class, IEntity<Guid>
     where Context : DbContext
 {
@@ -43,7 +43,7 @@ public abstract class GenericRepository<Model, Context>(GenericDbContext<Context
 
     }
 
-    public async Task<IEnumerable<Model>> GetElements(Expression<Func<Model, bool>> predicate = default!, bool AsNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<Model, object>>[] includes)
+    public async Task<IEnumerable<Model>> GetElements(Expression<Func<Model, bool>>? predicate = default!, bool AsNoTracking = true, CancellationToken cancellationToken = default, params Expression<Func<Model, object>>[] includes)
 
     {
         DbSet<Model> set = dbContext.GetDbSet<Model>();

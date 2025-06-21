@@ -1,9 +1,11 @@
- 
+
+
+using Account.Data.Repositories;
 
 namespace Account.Users.Features.GetUserByCondition;
 
 
-public class GetUserByConditionHandler(AccountDbContext dbContext, ILogger<GetUserByConditionHandler> logger)
+public class GetUserByConditionHandler(IAccountRepository repository, ILogger<GetUserByConditionHandler> logger)
     : AccountModuleStructre.GetUsersByCondition.IMEndpointGetHandler
 {
     public async Task<GenericResult<HashSet<UserDto>>> Handle(AccountModuleStructre.GetUsersByCondition.Query request, CancellationToken cancellationToken)
@@ -16,14 +18,16 @@ public class GetUserByConditionHandler(AccountDbContext dbContext, ILogger<GetUs
         return new GenericResult<HashSet<UserDto>>(users);
     }
 
-    public async Task<HashSet<User>> filterUsers(UserDto condition, CancellationToken cancellationToken)
+    public async Task<IEnumerable<User>> filterUsers(UserDto condition, CancellationToken cancellationToken)
     {
-        var users = await dbContext.Users.AsNoTracking().ToHashSetAsync(cancellationToken);
-        return users.Where(user =>
-                (condition.UserName == null || user.UserName.Contains(condition.UserName)) &&
-                (condition.Email == null || user.Email.Contains(condition.Email)) &&
-                (condition.PhoneNumber == null || user.PhoneNumber.Contains(condition.PhoneNumber)) &&
-                (condition.Address == null || user.address.ToString().Contains(condition.Address)))
-            .ToHashSet();
+        Expression<Func<User, bool>> filter = user =>
+         (condition.UserName == null || user.UserName.Contains(condition.UserName)) &&
+        (condition.Email == null || user.Email.Contains(condition.Email)) &&
+        (condition.PhoneNumber == null || user.PhoneNumber.Contains(condition.PhoneNumber)) &&
+        (condition.Address == null || user.address.ToString().Contains(condition.Address));
+
+
+        return await repository.GetUserByCondition(filter, true, cancellationToken);
+
     }
 }

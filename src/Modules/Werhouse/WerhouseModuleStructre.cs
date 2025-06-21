@@ -1,5 +1,8 @@
- 
 
+
+
+
+using Shared.Data;
 
 
 namespace Werhouse;
@@ -24,11 +27,18 @@ public class WerhouseModuleStructre : ModuleMechanism<WerhouseItem>
 
 
     //repositories
-    public interface IMWerhouseRepository : IMModelConfiguration.IMRepository;
+    public abstract class WerhouseRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R, WerhouseDbContext>(repository) where R : class, IGenericRepository<WerhouseItem>;
 
-    public abstract class MWerhouseRepository(WerhouseDbContext dbContext) : IMModelConfiguration.MRepository<WerhouseDbContext>(dbContext);
 
-    public abstract class MWerhouseCachedRepository(MWerhouseRepository repository, IDistributedCache cache) : IMModelConfiguration.MCachedRepository<WerhouseDbContext>(repository, cache);
+    public class WerhouseSQLRepository(GenericDbContext<WerhouseDbContext> dbContext) :
+        WerhouseLocalRepository<GenericRepository<WerhouseItem, WerhouseDbContext>>(
+            new GenericRepository<WerhouseItem, WerhouseDbContext>(dbContext));
+
+
+    public class CachedWerhouseRepository(WerhouseSQLRepository repository, IDistributedCache cache) :
+        WerhouseLocalRepository<GenericCachedRepository<WerhouseItem, WerhouseDbContext>>(
+            new GenericCachedRepository<WerhouseItem, WerhouseDbContext>(repository.getMasterRepository(), cache));
+
 
 
     //commands

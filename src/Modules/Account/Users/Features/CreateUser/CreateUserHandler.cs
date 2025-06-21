@@ -1,8 +1,10 @@
- 
+
+
+using Account.Data.Repositories;
 
 namespace Account.Users.Features.CreateUser;
 
-public class CreateUserHandler(AccountDbContext dbContext, ILogger<CreateUserHandler> logger)
+public class CreateUserHandler(IAccountRepository repository, ILogger<CreateUserHandler> logger)
     : AccountModuleStructre.CreateUser.IMEndpointPostHandler
 {
     public async Task<GenericResult<Guid>> Handle(AccountModuleStructre.CreateUser.Command request, CancellationToken cancellationToken)
@@ -16,10 +18,8 @@ public class CreateUserHandler(AccountDbContext dbContext, ILogger<CreateUserHan
         ArgumentException.ThrowIfNullOrEmpty(request.input.Address, nameof(request.input.Address));
 
 
-        User user = await User.fromDto(request.input, cancellationToken);
+        User user = await repository.CreateUser(request.input, cancellationToken);
         Console.WriteLine($"User created with ID: {user.Id}, UserName: {user.UserName}, Name: {user.FirstName} {user.LastName}, Email: {user.Email}, PhoneNumber: {user.PhoneNumber}, Address: {user.address}");
-        dbContext.Users.Add(user);
-        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new GenericResult<Guid>(user.Id);
     }
