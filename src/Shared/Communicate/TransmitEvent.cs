@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
+﻿
 namespace Shared.Communicate
 {
     // Abstract base for MassTransit in-memory events

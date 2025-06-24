@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
-
+﻿
 namespace Werhouse.Data.Migrations
 {
     /// <inheritdoc />
