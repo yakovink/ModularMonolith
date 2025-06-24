@@ -1,10 +1,4 @@
 
-
-
-
-using Shared.Data;
-
-
 namespace Werhouse;
 
 public class WerhouseModuleStructre : ModuleMechanism<WerhouseItem>
@@ -23,21 +17,14 @@ public class WerhouseModuleStructre : ModuleMechanism<WerhouseItem>
 
     
     // DbContext
-    public abstract class MWerhouseDbContext(DbContextOptions<WerhouseDbContext> options) : IMModelConfiguration.MContext<WerhouseDbContext>(options, new[] { typeof(WerhouseItem), typeof(WerhouseItemHistory) });
+    public abstract class MWerhouseDbContext(DbContextOptions<WerhouseDbContext> options) : 
+        IMModelConfiguration.MContext<WerhouseDbContext>(
+            options, new[] { typeof(WerhouseItem), typeof(WerhouseItemHistory) });
 
 
     //repositories
-    public abstract class WerhouseRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R, WerhouseDbContext>(repository) where R : class, IGenericRepository<WerhouseItem>;
+    public abstract class WerhouseRepository(IGenericRepository<WerhouseItem> repository) : IMModelConfiguration.LocalRepository<WerhouseDbContext>(repository);
 
-
-    public class WerhouseSQLRepository(GenericDbContext<WerhouseDbContext> dbContext) :
-        WerhouseLocalRepository<GenericRepository<WerhouseItem, WerhouseDbContext>>(
-            new GenericRepository<WerhouseItem, WerhouseDbContext>(dbContext));
-
-
-    public class CachedWerhouseRepository(WerhouseSQLRepository repository, IDistributedCache cache) :
-        WerhouseLocalRepository<GenericCachedRepository<WerhouseItem, WerhouseDbContext>>(
-            new GenericCachedRepository<WerhouseItem, WerhouseDbContext>(repository.getMasterRepository(), cache));
 
 
 
@@ -52,7 +39,8 @@ public class WerhouseModuleStructre : ModuleMechanism<WerhouseItem>
     public interface GetItemsByCondition : MGet<WerhouseItemDto,HashSet<WerhouseItemDto>>;
     
 
-
+    //controllers:
+    public class WerhouseHttpController() : HttpController("http://localhost", 5000);
 
     
 }

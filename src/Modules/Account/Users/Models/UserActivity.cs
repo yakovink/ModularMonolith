@@ -1,9 +1,11 @@
 ﻿
+
 namespace Account.Users.Models
 {
     public class UserActivity : Entity<Guid>, AccountModuleStructre.IAccountConfigurations.Property
     {
         public Guid UserId { get; private set; }
+        [JsonIgnore]
         public User user { get; private set; } = default!;
         public string ActivityType { get; private set; } = default!;
         public string IpAddress { get; private set; } = default!;

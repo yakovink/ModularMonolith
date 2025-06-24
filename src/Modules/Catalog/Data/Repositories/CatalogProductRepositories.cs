@@ -1,14 +1,7 @@
-﻿using Shared.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Catalog.Data.Repositories
 {
-    public abstract class CatalogLocalRepository<R>(R repository) : CatalogModuleStructre.CatalogRepository<R>(repository), ICatalogRepository
-        where R : class, IGenericRepository<Product>
+    public class CatalogLocalRepository(IGenericRepository<Product> repository, IHttpController controller) : CatalogModuleStructre.CatalogRepository(repository), ICatalogRepository
     {
         public async Task<Product> CreateProduct(ProductDto productDto, CancellationToken cancellationToken)
         {

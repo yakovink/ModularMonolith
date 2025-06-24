@@ -47,8 +47,4 @@ global using Werhouse.Items.Models;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 
-public static class Constants
-{
-	public static readonly HttpController WerhouseController = new HttpController("http://localhost", 5000);
-
-}
+global using Shared.Data;

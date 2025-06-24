@@ -1,6 +1,4 @@
 
-using Shared.Data;
-
 namespace Catalog.Data;
 
 public class CatalogDbContext(DbContextOptions<CatalogDbContext> options): CatalogModuleStructre.MCatalogDbContext(options)

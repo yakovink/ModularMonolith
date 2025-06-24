@@ -8,7 +8,7 @@ using Shared.Data;
 
 namespace Shared.Mechanism;
 
-public abstract class ModuleMechanism <Model> where Model : class, IAggregate<Guid>
+public abstract class ModuleMechanism <Model> where Model : Aggregate<Guid>
 {   
 
     // applyment

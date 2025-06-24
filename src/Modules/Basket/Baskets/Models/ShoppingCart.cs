@@ -26,25 +26,6 @@ public class ShoppingCart : Aggregate<Guid>
         return shoppingCart;
     }
 
-    public ShoppingCartItem AddItem(ShoppingCartItemDto itemDto)
-    {
-        if (itemDto.ProductId == null || itemDto.Quantity == null)
-        {
-            throw new ArgumentException("invalid parameters");
-        }
-        ShoppingCartItem item = ShoppingCartItem.Create(this, (Guid)itemDto.ProductId, (int)itemDto.Quantity);
-        item.setCart(this);
-        items.Add(item);
-        return item;
-    }
-
-    public void checkEmpty()
-    {
-        if (items.Count() == 0)
-        {
-            throw new Exception("the cart is empty");
-        }
-    }
     
 
 }

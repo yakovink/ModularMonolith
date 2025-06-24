@@ -30,9 +30,24 @@ services:
     container_name: seq
     environment:
        - ACCEPT_EULA=Y
+       - SEQ_FIRSTRUN_NOAUTHENTICATION=true
     restart: always
     ports:
-      - 5341:80
+      - 5341:5341
       - 9092:80
+
+  messagebus:
+    image: rabbitmq:3-management
+    container_name: messagebus
+    hostname: ecommerce-mq
+    environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    ports:
+        - 5672:5672
+        - 15672:15672
+
+    
 
     

@@ -1,6 +1,4 @@
 
-using Catalog.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Features.GetProducts;
 

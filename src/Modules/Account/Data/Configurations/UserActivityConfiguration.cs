@@ -7,10 +7,10 @@ namespace Account.Data.Configurations
         public void Configure(EntityTypeBuilder<UserActivity> builder)
         {
             builder.HasKey(i => i.Id);
-            builder.Property("userId").IsRequired();
-            builder.Property("activityType").IsRequired();
-            builder.Property("IpAddress").IsRequired();
-            builder.Property("isValidated").IsRequired();
+            builder.Property(u=>u.ActivityType).IsRequired();
+            builder.Property(u=>u.UserId).IsRequired();
+            builder.Property(u=>u.IpAddress).IsRequired();
+            builder.Property(u=>u.isValidated).IsRequired();
             builder.HasOne(i => i.user).WithMany(u=>u.Activities).HasForeignKey(i=>i.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }

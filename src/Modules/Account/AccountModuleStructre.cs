@@ -27,17 +27,9 @@ public class AccountModuleStructre : ModuleMechanism<User>
 
     //repositories
 
-    public abstract class AccountRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R,AccountDbContext>(repository) where R : class , IGenericRepository<User>;
+    public abstract class AccountRepository(IGenericRepository<User> repository) : IMModelConfiguration.LocalRepository<AccountDbContext>(repository);
 
 
-    public class AccountSQLRepository(GenericDbContext<AccountDbContext> dbContext) :
-        AccountLocalRepository<GenericRepository<User, AccountDbContext>>(
-            new GenericRepository<User, AccountDbContext>(dbContext));
-
-
-    public class CachedAccountRepository(AccountSQLRepository repository, IDistributedCache cache) :
-        AccountLocalRepository<GenericCachedRepository<User, AccountDbContext>>(
-            new GenericCachedRepository<User, AccountDbContext>(repository.getMasterRepository(), cache));
 
 
     //commands
@@ -46,13 +38,15 @@ public class AccountModuleStructre : ModuleMechanism<User>
     public interface DeleteUser : MDelete<Guid, bool>;
     public interface ChangePassword : MPost<PasswordDto, bool>;
 
-    public 
+    
 
     //queries
     public interface GetUserById : MGet<Guid, UserDto>;
     public interface GetUsersByCondition : MGet<UserDto, HashSet<UserDto>>;
     public interface GetUsers : MGet<PaginationRequest, PaginatedResult<UserDto>>;
 
+    // controllers
+    public class AccountHttpController() : HttpController("http://localhost",5000);
     
 
 

@@ -1,6 +1,7 @@
 
 
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace Account.Users.Models;
 
@@ -15,6 +16,7 @@ public class User : Aggregate<Guid>
     public string PhoneNumber { get; set; } = default!;
     public string address { get; set; } = default!;
     public Guid ShoppingCartId { get; private set; }
+    [JsonInclude]
     public List<UserActivity> Activities { get; private set; } = new();
 
 

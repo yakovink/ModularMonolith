@@ -40,6 +40,18 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
+
+
+// Resolve the CS0433 error by specifying the namespace explicitly for 'MassTransitExtention'  
+
+builder.Services.RegisterMassTransmit(
+    builder.Configuration,
+    catalogAssemly,
+    basketAssembly,
+    accountAssembly,
+    werhouseAssembly
+);
+
 // Services container
 
 builder.Services.AddControllers();

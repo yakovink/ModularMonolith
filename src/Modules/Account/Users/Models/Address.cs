@@ -46,7 +46,7 @@ public class Address : Entity<Guid>
         };
 
     }
-
+    /*
     public static async Task<List<string>> GetCountriesAsync()
     {
         var list = new CountriesList();
@@ -81,7 +81,7 @@ public class Address : Entity<Guid>
         }
         return cities;
     }
-    
+    */
     public override string ToString()
     {
         return $"{Street}, {City}, {State}, {ZipCode}, {Country}";

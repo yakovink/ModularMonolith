@@ -1,8 +1,5 @@
  
-using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Caching.Distributed;
-using Shared.Data;
+
 
 namespace Shared.Mechanism;
 
@@ -23,8 +20,7 @@ where Model : Aggregate<Guid>
     //repositories
     public interface IMRepository;
 
-    public abstract class LocalRepository<R, MC>(R repository) : GenericLocalRepository<R,MC, Model>(repository)
-        where R : class , IGenericRepository<Model>;
+    public abstract class LocalRepository<MC>(IGenericRepository<Model> repository) : GenericLocalRepository<MC, Model>(repository);
 
 
     //properties

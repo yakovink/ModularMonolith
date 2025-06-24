@@ -1,8 +1,3 @@
-using Catalog.Data.Repositories;
-using Microsoft.Extensions.Caching.Distributed;
-using Shared.Data;
-using Shared.Mechanism;
-using System;
 
 namespace Catalog;
 
@@ -18,17 +13,9 @@ public class CatalogModuleStructre : ModuleMechanism<Product>
 
 
     //repositories
-    public abstract class CatalogRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R, CatalogDbContext>(repository) where R : class, IGenericRepository<Product>;
+    public abstract class CatalogRepository(IGenericRepository<Product> repository) : IMModelConfiguration.LocalRepository<CatalogDbContext>(repository) ;
 
 
-    public class CatalogSQLRepository(GenericDbContext<CatalogDbContext> dbContext) :
-        CatalogLocalRepository<GenericRepository<Product, CatalogDbContext>>(
-            new GenericRepository<Product, CatalogDbContext>(dbContext));
-
-
-    public class CachedCatalogRepository(CatalogSQLRepository repository, IDistributedCache cache) :
-        CatalogLocalRepository<GenericCachedRepository<Product, CatalogDbContext>>(
-            new GenericCachedRepository<Product, CatalogDbContext>(repository.getMasterRepository(), cache));
 
     //commands
     public interface CreateProduct : MPost<ProductDto, Guid>;
@@ -38,4 +25,8 @@ public class CatalogModuleStructre : ModuleMechanism<Product>
     public interface GetProductById : MGet<Guid, ProductDto>;
     public interface GetProductsByCondition : MGet<ProductDto, HashSet<ProductDto>>;
     public interface GetProducts : MGet<PaginationRequest, PaginatedResult<ProductDto>>;
+
+    //controllers
+
+    public class CatalogHttpController() : HttpController("http://localhost", 5000);
 }

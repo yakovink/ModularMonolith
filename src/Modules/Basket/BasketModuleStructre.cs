@@ -1,6 +1,6 @@
-using Shared.Data;
-using Shared.Mechanism;
-using System;
+
+
+
 
 namespace Basket;
 
@@ -23,22 +23,13 @@ public class BasketModuleStructre : ModuleMechanism<ShoppingCart>
 
 
     //repositories
-    public abstract class BasketRepository<R>(R repository) : IMModelConfiguration.LocalRepository<R, BasketDbContext>(repository) where R : class, IGenericRepository<ShoppingCart>;
+    public abstract class BasketRepository(IGenericRepository<ShoppingCart> repository) : IMModelConfiguration.LocalRepository<BasketDbContext>(repository);
 
-
-    public class BasketSQLRepository(GenericDbContext<BasketDbContext> dbContext) :
-        BasketLocalRepository<GenericRepository<ShoppingCart, BasketDbContext>>(
-            new GenericRepository<ShoppingCart, BasketDbContext>(dbContext));
-
-
-    public class CachedBasketRepository(BasketSQLRepository repository, IDistributedCache cache) :
-        BasketLocalRepository<GenericCachedRepository<ShoppingCart, BasketDbContext>>(
-            new GenericCachedRepository<ShoppingCart, BasketDbContext>(repository.getMasterRepository(), cache));
 
 
 
     //commands
-    public interface CreateBasket : MPost<bool, Guid>;
+    public interface CreateBasket : MPost<object, Guid>;
     public interface DeleteBasket : MDelete<Guid, bool>;
     public interface AddItemIntoBasket : MPost<ShoppingCartItemDto, Guid>;
     public interface RemoveItemFromBasket : MDelete<ShoppingCartItemDto, bool>;
@@ -46,5 +37,8 @@ public class BasketModuleStructre : ModuleMechanism<ShoppingCart>
     //queries
     public interface GetBasket : MGet<Guid, HashSet<ShoppingCartItemDto>>;
     
+    //controllers
+
+    public class BasketHttpController() : HttpController("http://localhost", 5000);
 
 }

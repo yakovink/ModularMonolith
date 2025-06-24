@@ -1,7 +1,5 @@
 
 
-using Account.Data.Repositories;
-
 namespace Account.Users.Features.CreateUser;
 
 public class CreateUserHandler(IAccountRepository repository, ILogger<CreateUserHandler> logger)

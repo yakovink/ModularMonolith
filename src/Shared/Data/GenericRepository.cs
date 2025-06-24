@@ -1,7 +1,4 @@
  
-using System.Linq.Expressions;
-using Shared.Exceptions;
-
 namespace Shared.Data;
 
 public class GenericRepository<Model, Context>(GenericDbContext<Context> dbContext) : IGenericRepository<Model>

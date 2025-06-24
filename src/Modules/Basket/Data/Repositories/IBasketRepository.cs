@@ -4,7 +4,7 @@ using Shared.Data;
 
 namespace Basket.Data.Repositories;
 
-public interface IBasketRepository : BasketModuleStructre.IMBasketRepository
+public interface IBasketRepository 
 {
 
 

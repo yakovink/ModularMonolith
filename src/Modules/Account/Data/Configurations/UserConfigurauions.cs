@@ -1,5 +1,4 @@
 
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Account.Data.Configurations;
 
@@ -7,7 +6,6 @@ public class UserConfigurauions : AccountModuleStructre.IAccountConfigurations.I
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("Users", "account");
         builder.HasKey(e => e.Id);
 
         builder.HasIndex(e => e.UserId).IsUnique();

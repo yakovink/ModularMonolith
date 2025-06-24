@@ -29,3 +29,12 @@ global using MediatR;
 global using FluentValidation;
 global using FluentValidation.Results;
 
+global using System.Collections;
+global using System.ComponentModel.Design;
+global using System.Linq.Expressions;
+global using Microsoft.EntityFrameworkCore.Metadata.Internal;
+global using Microsoft.Extensions.Caching.Distributed;
+global using Shared.Exceptions;
+global using MassTransit;
+global using Shared.GenericRootModule.Features;
+global using Shared.Data;

@@ -4,7 +4,6 @@ mediatR is a messaging platform that use components memory
 locations to transfer messages betwen components
 
 */
-using Catalog.Data.Repositories;
 
 namespace Catalog.Features.CreateProduct;
 

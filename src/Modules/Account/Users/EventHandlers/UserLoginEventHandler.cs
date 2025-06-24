@@ -6,7 +6,7 @@ public class UserLoginEventHandler(ILogger<UserLoginEventHandler> logger) : INot
 {
     public Task Handle(UserLoginEvent notification, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Username: {UserName} login at {time}", notification.user.UserName, notification.user.LastLogin);
+        logger.LogInformation("Username: {UserName} login at {time}", notification.user.UserName, notification.user.Activities.Last()._createdDate);
         return Task.CompletedTask;
     }
 

@@ -1,4 +1,3 @@
-using Catalog.Data.Repositories;
 
 namespace Catalog.Features.GetProductsByCondition;
 

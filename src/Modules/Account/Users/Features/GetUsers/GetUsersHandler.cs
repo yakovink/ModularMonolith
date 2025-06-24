@@ -1,8 +1,6 @@
 
 
 
-using Account.Data.Repositories;
-
 namespace Account.Users.Features.GetUsers;
 
 

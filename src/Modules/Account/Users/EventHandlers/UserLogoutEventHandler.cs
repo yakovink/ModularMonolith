@@ -6,7 +6,7 @@ public class UserLogoutEventHandler(ILogger<UserLogoutEventHandler> logger) : IN
 {
     public Task Handle(UserLogoutEvent notification, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Username: {UserName} logout at {time}", notification.user.UserName, notification.user.LastLogout);
+        logger.LogInformation("Username: {UserName} logout at {time}", notification.user.UserName, notification.user.Activities.Last()._createdDate);
         return Task.CompletedTask;
     }
 }

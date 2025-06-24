@@ -44,21 +44,21 @@ global using MediatR;
 global using Carter;
 global using FluentValidation;
 
-
-
+global using System;
 global using Account.Data;
+
+
+
+
 global using Account.Users.Models;
 global using Account.Users.Events;
 global using Account.Users.Dtos;
 global using Account.Data.Repositories;
 global using Account;
+global using System.Text.Json.Serialization;
 
 
 
 
-public static class Constants
-{
-	public static readonly HttpController AccountController = new HttpController("http://localhost", 5000);
 
-}
 

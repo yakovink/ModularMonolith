@@ -3,12 +3,10 @@
 
 
 
-using Shared.Data;
-
 namespace Account.Data.Repositories;
 
-public abstract class AccountLocalRepository<R>(R repository) : AccountModuleStructre.AccountRepository<R>(repository), IAccountRepository 
-    where R : class , IGenericRepository<User>
+public class AccountLocalRepository(IGenericRepository<User> repository,IHttpController controller) : AccountModuleStructre.AccountRepository(repository), IAccountRepository 
+
 {
 
 
@@ -41,9 +39,7 @@ public abstract class AccountLocalRepository<R>(R repository) : AccountModuleStr
     public async Task<User> CreateUser(UserDto userDto, CancellationToken cancellationToken = default)
     {
 
-        JsonDocument response = await Constants.AccountController.Post("baskets/create", new { input = new { } }, cancellationToken);
-        Console.WriteLine(response.RootElement.ToString());
-        JsonElement cartid = response.RootElement.GetProperty("output");
+        JsonElement cartid = await controller.Post("baskets/create", new { input = new { } }, cancellationToken);
         Guid cartId= Guid.Parse(cartid.GetString()!);
 
 

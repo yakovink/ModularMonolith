@@ -1,11 +1,3 @@
- 
-using System.Collections;
-using System.ComponentModel.Design;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Caching.Distributed;
-using Shared.Exceptions;
-
 namespace Shared.Data;
 
 public class GenericCachedRepository<Model, Context>(GenericRepository<Model, Context> repository, IDistributedCache cache) : IGenericRepository<Model>

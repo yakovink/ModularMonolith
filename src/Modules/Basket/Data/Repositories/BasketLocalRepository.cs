@@ -1,12 +1,12 @@
 
 
-using Shared.Data;
 
 namespace Basket.Data.Repositories;
 
-public abstract class BasketLocalRepository<R>(R repository) : BasketModuleStructre.BasketRepository<R>(repository), IBasketRepository
-    where R : class, IGenericRepository<ShoppingCart>
+public class BasketLocalRepository(IGenericRepository<ShoppingCart> repository, IHttpController controller) : BasketModuleStructre.BasketRepository(repository), IBasketRepository
+
 {
+    private IHttpController c=controller;
     public async Task<ShoppingCartItem> AddItem(ShoppingCartItem item, CancellationToken cancellationToken = default)
     {
         item = await repository.AddElementToCollection(item,

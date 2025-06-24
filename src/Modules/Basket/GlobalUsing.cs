@@ -9,13 +9,19 @@ global using Shared.Exceptions;
 global using Shared.Paginations;
 global using Shared.Enums;
 global using Shared.Communicate;
-
+global using Shared.Data;
+global using Shared.Mechanism;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Linq.Expressions;
 global using System.Reflection;
-
+global using Basket.Data;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.Extensions.Configuration;
@@ -27,8 +33,6 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Routing;
 global using Microsoft.EntityFrameworkCore.Migrations;
 global using Microsoft.Extensions.Caching.Distributed;
-global using Microsoft.EntityFrameworkCore.Infrastructure;
-global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 global using Mapster;
 global using MediatR;
@@ -37,7 +41,7 @@ global using FluentValidation;
 
 
 
-global using Basket.Data;
+
 global using Basket.Baskets.Dtos;
 global using Basket.Data.Repositories;
 global using Basket.Baskets.Models;
@@ -45,10 +49,4 @@ global using Basket;
 
 
 
-global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-public static class Constants
-{
-	public static readonly HttpController BasketController = new HttpController("http://localhost", 5000);
-
-}

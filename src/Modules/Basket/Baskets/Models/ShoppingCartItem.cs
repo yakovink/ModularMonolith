@@ -44,21 +44,6 @@ public class ShoppingCartItem : Entity<Guid>, BasketModuleStructre.CartItem
     }
 
 
-    public void setCart(ShoppingCart cart)
-    {
-        if (cart.Id != ShoppingCartId)
-        {
-            throw new InternalServerException("wrong cart");
-        }
-        ShoppingCart = cart;
-    }
-
-    public static async Task<JsonElement> GetProduct(Guid productId)
-    {
-        HttpController controller = Constants.BasketController;
-        JsonDocument doc = await controller.Get($"products/get?input={productId}");
-        return doc.RootElement;
-    }
 
     public ShoppingCartItemDto ToDto()
     {

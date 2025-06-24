@@ -15,7 +15,7 @@ internal class CreateBasketEndpoint : BasketModuleStructre.CreateBasket.MPostEnd
         };
     }
 
-    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<bool, Guid> request, ISender sender)
+    protected async override Task<IResult> NewEndpoint(GenericCommandRequest<object, Guid> request, ISender sender)
     {
         return await SendResults(new BasketModuleStructre.CreateBasket.Command(request.input), sender);
     }

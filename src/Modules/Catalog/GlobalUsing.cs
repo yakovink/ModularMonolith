@@ -10,9 +10,11 @@ global using Catalog.Products.Events;
 global using Catalog.Data;
 global using Catalog.Data.Seed;
 global using Catalog.Products.Dtos;
+global using Catalog.Data.Repositories;
 
-
-
+global using Shared.Communicate;
+global using Shared.Data;
+global using Shared.Mechanism;
 global using System.Linq.Expressions;
 global using System.Reflection;
 
@@ -41,3 +43,5 @@ global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 global using Microsoft.AspNetCore.Mvc;
+global using System;
+

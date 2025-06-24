@@ -1,12 +1,9 @@
 
 
-using Shared.Data;
-using System.Runtime.CompilerServices;
 
 namespace Werhouse.Data.Repositories;
 
-public abstract class WerhouseLocalRepository<R>(R repository) : WerhouseModuleStructre.WerhouseRepository<R>(repository), IWerhouseRepository
-    where R : class, IGenericRepository<WerhouseItem>
+public class WerhouseLocalRepository(IGenericRepository<WerhouseItem> repository, IHttpController controller) : WerhouseModuleStructre.WerhouseRepository(repository), IWerhouseRepository
 {
     
     public async Task<IEnumerable<WerhouseItemHistory>> GetItemHistory(Guid itemId, bool AsNoTracking = true, CancellationToken cancellationToken = default)
@@ -23,8 +20,7 @@ public abstract class WerhouseLocalRepository<R>(R repository) : WerhouseModuleS
 
     public async Task<WerhouseItem> GetNewItem(Guid productId, CancellationToken cancellationToken = default)
     {
-        JsonDocument doc = await Constants.WerhouseController.Get($"products/get?input={productId}",cancellationToken);
-        JsonElement productElement = doc.RootElement.GetProperty("output");
+        JsonElement productElement = await controller.Get($"products/get?input={productId}",cancellationToken);
         if (productElement.ValueKind == JsonValueKind.Null)
         {
             throw new ProductNotFoundException(productId);

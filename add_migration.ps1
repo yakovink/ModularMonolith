@@ -5,7 +5,7 @@ param(
 )
 
 # Build paths based on convention
-$modulePath = "Modules/$ModuleName"
+$modulePath = "src/Modules/$ModuleName"
 $csproj = "$modulePath/$ModuleName.csproj"
 $dbContext = "${ModuleName}DbContext"
 
@@ -13,6 +13,6 @@ $dbContext = "${ModuleName}DbContext"
 $migrationOutput = "Data/Migrations"
 
 # Build the dotnet ef command
-$cmd = "dotnet-ef migrations add $MigrationName -o $migrationOutput -p $csproj -s Bootstraper/API -c $dbContext"
+$cmd = "dotnet-ef migrations add $MigrationName -o $migrationOutput -p $csproj -s src/Bootstraper/API -c $dbContext"
 Write-Host "Running: $cmd" -ForegroundColor Cyan
 Invoke-Expression $cmd
